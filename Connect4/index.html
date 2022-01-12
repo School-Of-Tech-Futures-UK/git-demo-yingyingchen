@@ -12,7 +12,7 @@
     <h1>Connect 4</h1>
     <p id="winner-display">The winner is <span id="winner-name"></span></p>
     <div class="grid" id="grid">
-        <div class="row" id="row-0" onClick="takeTurn(event)">
+        <div class="row" id="row-0" onClick="positionClick(event)">
             <div class="column" id="row-0-column-0"></div>
             <div class="column" id="row-0-column-1"></div>
             <div class="column" id="row-0-column-2"></div>
@@ -20,7 +20,7 @@
             <div class="column" id="row-0-column-4"></div>
             <div class="column" id="row-0-column-5"></div>
         </div>
-        <div class="row" id="row-1" onClick="takeTurn(event)">
+        <div class="row" id="row-1" onClick="positionClick(event)">
             <div class="column" id="row-1-column-0"></div>
             <div class="column" id="row-1-column-1"></div>
             <div class="column" id="row-1-column-2"></div>
@@ -28,7 +28,7 @@
             <div class="column" id="row-1-column-4"></div>
             <div class="column" id="row-1-column-5"></div>
         </div>
-        <div class="row" id="row-2" onClick="takeTurn(event)">
+        <div class="row" id="row-2" onClick="positionClick(event)">
             <div class="column" id="row-2-column-0"></div>
             <div class="column" id="row-2-column-1"></div>
             <div class="column" id="row-2-column-2"></div>
@@ -36,7 +36,7 @@
             <div class="column" id="row-2-column-4"></div>
             <div class="column" id="row-2-column-5"></div>
         </div>
-        <div class="row" id="row-3" onClick="takeTurn(event)">
+        <div class="row" id="row-3" onClick="positionClick(event)">
             <div class="column" id="row-3-column-0"></div>
             <div class="column" id="row-3-column-1"></div>
             <div class="column" id="row-3-column-2"></div>
@@ -44,7 +44,7 @@
             <div class="column" id="row-3-column-4"></div>
             <div class="column" id="row-3-column-5"></div>
         </div>
-        <div class="row" id="row-4" onClick="takeTurn(event)">
+        <div class="row" id="row-4" onClick="positionClick(event)">
             <div class="column" id="row-4-column-0"></div>
             <div class="column" id="row-4-column-1"></div>
             <div class="column" id="row-4-column-2"></div>
@@ -52,7 +52,7 @@
             <div class="column" id="row-4-column-4"></div>
             <div class="column" id="row-4-column-5"></div>
         </div>
-        <div class="row" id="row-5" onClick="takeTurn(event)">
+        <div class="row" id="row-5" onClick="positionClick(event)">
             <div class="column" id="row-5-column-0"></div>
             <div class="column" id="row-5-column-1"></div>
             <div class="column" id="row-5-column-2"></div>
@@ -60,7 +60,7 @@
             <div class="column" id="row-5-column-4"></div>
             <div class="column" id="row-5-column-5"></div>
         </div>
-        <div class="row" id="row-6" onClick="takeTurn(event)">
+        <div class="row" id="row-6" onClick="positionClick(event)">
             <div class="column" id="row-6-column-0"></div>
             <div class="column" id="row-6-column-1"></div>
             <div class="column" id="row-6-column-2"></div>
@@ -69,7 +69,7 @@
             <div class="column" id="row-6-column-5"></div>
         </div>
     </div>
-    <button id="reset-button">Reset</button>
+    <button id="reset-button" onClick="resetGame()">Reset</button>
     <p>Remember to open your dev tools by pressing F12 to view log messages and errors!</p>
     
 </body>

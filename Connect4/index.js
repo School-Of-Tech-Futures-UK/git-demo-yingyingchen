@@ -37,9 +37,8 @@ function getAvailableColumn(rowSelected) {
     return "full"
 }
 
-function takeTurn(ev) {
-    const id = ev.target.id
-    const rowSelected = id[4]
+// play the game and change the game state
+function takeTurn(rowSelected) {
     const columnSelected = getAvailableColumn(rowSelected)
     if (columnSelected !== "full") {
         if (board[rowSelected][columnSelected] === null) {
@@ -52,11 +51,11 @@ function takeTurn(ev) {
             }
         }
     }
-    drawBoard(board)
     console.log(`row selected: ${rowSelected} column selected: ${columnSelected}`)
     console.log(board)
 }
 
+// clear the board
 function clearBoard() {
     for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
         for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
@@ -65,6 +64,7 @@ function clearBoard() {
     }
 }
 
+// draw the board at a given state
 function drawBoard(board) {
     clearBoard();
     for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
@@ -76,4 +76,26 @@ function drawBoard(board) {
             document.getElementById(`row-${rowIndex}-column-${columnIndex}`).style.background = color;
         }
     }
+}
+
+// click the column, play the game, record the game state, and check for winner
+function positionClick(ev) {
+    const id = ev.target.id
+    const rowSelected = id[4]
+    takeTurn(rowSelected)
+    drawBoard(board)
+}
+
+// reset game
+function resetGame() {
+    for (let i = 0; i < rowNum; i++) {
+        for (let j = 0; j < colNum; j++) {
+            _board[i][j] = 0
+            board[i][j] = null
+        }
+    }
+    turn = "red"
+    document.querySelectorAll(".column").forEach((cube) => cube.style.background = "white")
+    console.log("resetGame was called");
+    console.log(board)
 }
