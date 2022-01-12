@@ -194,6 +194,7 @@ function positionClick(ev) {
     const id = ev.target.id
     const rowSelected = id[4]
     takeTurn(rowSelected)
+    document.getElementById("player-indicator").style.background = turn ? turn : "white"
     drawBoard(board)
     const winner = checkWinner()
     if (winner) {
