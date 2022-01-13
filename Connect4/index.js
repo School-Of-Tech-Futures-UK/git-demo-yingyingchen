@@ -73,6 +73,7 @@ function drawBoard(board) {
                 continue;
             }
             const color = board[rowIndex][columnIndex]
+            document.getElementById(`row-${rowIndex}-column-${columnIndex}`).classList.add('fall');
             document.getElementById(`row-${rowIndex}-column-${columnIndex}`).style.background = color;
         }
     }
@@ -88,7 +89,11 @@ function resetGame() {
         }
     }
     turn = "red"
-    document.querySelectorAll(".column").forEach((cube) => cube.style.background = "white")
+    document.querySelectorAll(".column").forEach((cube) => {
+        cube.style.background = "white"
+        cube.classList.remove("fall")
+    })
+    document.getElementById("player-indicator").style.background = "red"
     const winnerName = document.getElementById("winner-name");
     winnerName.innerText = "";
     const winnerDisplay = document.getElementById("winner-display");
@@ -113,16 +118,15 @@ function checkWinnerInArray(arr) {
 
 function checkWinner() {
     let i, j, winner
-
     // check row
     for (i = 0; i < rowNum; i++) {
-        const rowChecking = _board[i]
+        const rowChecking = board[i]
         winner = checkWinnerInArray(rowChecking)
         if (winner) {
             return winner
         }
     }
-
+    
     // check col
     for (j = 0; j < colNum; j++) {
         const columnChecking = []
@@ -194,7 +198,7 @@ function positionClick(ev) {
     const id = ev.target.id
     const rowSelected = id[4]
     takeTurn(rowSelected)
-    document.getElementById("player-indicator").style.background = turn ? turn : "white"
+    document.getElementById("player-indicator").style.background = turn ? turn : "red"
     drawBoard(board)
     const winner = checkWinner()
     if (winner) {

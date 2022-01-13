@@ -2,26 +2,31 @@
     width: 50px;
     height: 50px;
     margin: 1px;
-    border: 2px black solid;
+    border: 2px skyblue solid;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 80px;
     border-radius: 50%;
+    background-color: white;
 }
 
 .row {
-    height: 300px;
+    height: 325px;
     margin: 0px auto;
     display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
+    justify-content: center;
 }
 
 .grid {
     width: 400px;
-    height: 350px;
+    height: 330px;
     display: flex;
+    border: 2px white solid;
+    margin: 1px;
+    background-color: skyblue;
+    flex-direction: row;
+    align-items: center;
 }
 
 .marker {
@@ -31,8 +36,9 @@
 
 #winner-display {
     display: none;
-    background-color: grey;
+    background-color: blue;
     color: white;
+    width: 400px;
 }
 
 body {
@@ -45,4 +51,23 @@ body {
 
 #player-indicator {
     background: red;
+}
+
+body {
+    background-color: white;
+    color: white;
+}
+
+.fall {
+    animation-name: fall-animation;
+    animation-duration: 500ms;
+}
+
+@keyframes fall-animation {
+    from {
+        transform: translateY(-300px);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
