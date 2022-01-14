@@ -37,6 +37,7 @@ function getAvailableColumn(rowSelected) {
     return "full"
 }
 
+// Impure
 // play the game and change the game state
 function takeTurn(rowSelected) {
     const columnSelected = getAvailableColumn(rowSelected)
