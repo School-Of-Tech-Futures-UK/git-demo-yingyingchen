@@ -120,7 +120,7 @@ function checkWinner() {
     let i, j, winner
     // check row
     for (i = 0; i < rowNum; i++) {
-        const rowChecking = board[i]
+        const rowChecking = _board[i]
         winner = checkWinnerInArray(rowChecking)
         if (winner) {
             return winner
