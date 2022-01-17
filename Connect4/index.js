@@ -176,19 +176,19 @@ function positionClick(ev) {
     }
 }
 
-if (typeof exports === 'object') {
-    console.log("Running in Node")
-    // Node. Does not work with strict CommonJS, but only CommonJS-like 
-    // environments that support module.exports, like Node.
-    module.exports = {
-        takeTurn,
-        checkWinnerInArray,
-        checkWinner,
-        resetGame,
-        clearBoard,
-        drawBoard,
-        positionClick
-    }
-} else {
-    console.log("Running in Browser")
-}
+// if (typeof exports === 'object') {
+//     console.log("Running in Node")
+//     // Node. Does not work with strict CommonJS, but only CommonJS-like 
+//     // environments that support module.exports, like Node.
+//     module.exports = {
+//         takeTurn,
+//         checkWinnerInArray,
+//         checkWinner,
+//         resetGame,
+//         clearBoard,
+//         drawBoard,
+//         positionClick
+//     }
+// } else {
+//     console.log("Running in Browser")
+// }

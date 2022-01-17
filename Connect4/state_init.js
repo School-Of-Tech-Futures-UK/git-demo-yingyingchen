@@ -42,14 +42,15 @@ const state = {
     _board: [..._board]
 }
 
-if (typeof exports === 'object') {
-    console.log("Running in Node")
-    // Node. Does not work with strict CommonJS, but only CommonJS-like 
-    // environments that support module.exports, like Node.
-    module.exports = {
-        getAvailableColumn,
-        state
-    }
-} else {
-    console.log("Running in Browser")
-}
+// if (typeof exports === 'object') {
+//     console.log("Running in Node")
+//     // Node. Does not work with strict CommonJS, but only CommonJS-like 
+//     // environments that support module.exports, like Node.
+//     module.exports = {
+//         getAvailableColumn,
+//         state,
+//         map
+//     }
+// } else {
+//     console.log("Running in Browser")
+// }
