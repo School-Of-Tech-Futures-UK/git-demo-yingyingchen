@@ -18,13 +18,11 @@
 <body>
     <div class="card" style="background-color: skyblue; width: 30rem; margin: 0 auto;">
         <div class="card-body positive-relative">
-            <script src="state_init.js" type="text/javascript"></script>
-            <script src="index.js" type="text/javascript"></script>
             <h1 class="card-title">Connect 4</h1>
             <div class="container">
                 <div class="card-text mx-auto" id="winner-display">The winner is <span id="winner-name"></span></div>
                 <div class="grid mx-auto" id="grid">
-                    <div class="row" id="row-0" onClick="positionClick(event)">
+                    <div class="row" id="row-0">
                         <div class="column" id="row-0-column-0"></div>
                         <div class="column" id="row-0-column-1"></div>
                         <div class="column" id="row-0-column-2"></div>
@@ -32,7 +30,7 @@
                         <div class="column" id="row-0-column-4"></div>
                         <div class="column" id="row-0-column-5"></div>
                     </div>
-                    <div class="row" id="row-1" onClick="positionClick(event)">
+                    <div class="row" id="row-1">
                         <div class="column" id="row-1-column-0"></div>
                         <div class="column" id="row-1-column-1"></div>
                         <div class="column" id="row-1-column-2"></div>
@@ -40,7 +38,7 @@
                         <div class="column" id="row-1-column-4"></div>
                         <div class="column" id="row-1-column-5"></div>
                     </div>
-                    <div class="row" id="row-2" onClick="positionClick(event)">
+                    <div class="row" id="row-2">
                         <div class="column" id="row-2-column-0"></div>
                         <div class="column" id="row-2-column-1"></div>
                         <div class="column" id="row-2-column-2"></div>
@@ -48,7 +46,7 @@
                         <div class="column" id="row-2-column-4"></div>
                         <div class="column" id="row-2-column-5"></div>
                     </div>
-                    <div class="row" id="row-3" onClick="positionClick(event)">
+                    <div class="row" id="row-3">
                         <div class="column" id="row-3-column-0"></div>
                         <div class="column" id="row-3-column-1"></div>
                         <div class="column" id="row-3-column-2"></div>
@@ -56,7 +54,7 @@
                         <div class="column" id="row-3-column-4"></div>
                         <div class="column" id="row-3-column-5"></div>
                     </div>
-                    <div class="row" id="row-4" onClick="positionClick(event)">
+                    <div class="row" id="row-4">
                         <div class="column" id="row-4-column-0"></div>
                         <div class="column" id="row-4-column-1"></div>
                         <div class="column" id="row-4-column-2"></div>
@@ -64,7 +62,7 @@
                         <div class="column" id="row-4-column-4"></div>
                         <div class="column" id="row-4-column-5"></div>
                     </div>
-                    <div class="row" id="row-5" onClick="positionClick(event)">
+                    <div class="row" id="row-5">
                         <div class="column" id="row-5-column-0"></div>
                         <div class="column" id="row-5-column-1"></div>
                         <div class="column" id="row-5-column-2"></div>
@@ -72,7 +70,7 @@
                         <div class="column" id="row-5-column-4"></div>
                         <div class="column" id="row-5-column-5"></div>
                     </div>
-                    <div class="row" id="row-6" onClick="positionClick(event)">
+                    <div class="row" id="row-6">
                         <div class="column" id="row-6-column-0"></div>
                         <div class="column" id="row-6-column-1"></div>
                         <div class="column" id="row-6-column-2"></div>
@@ -88,12 +86,14 @@
                 </div>
                 <span>your turn</span>
             </div>
-    
+
             <button type="button" class="btn btn-outline-primary" style="color: white; border: 1px white solid"
                 id="reset-button" onClick="resetGame()">Reset</button>
-    
-    
-    
+
+            <script src="config.js" type="text/javascript"></script>
+            <script src="utils.js" type="text/javascript"></script>
+            <script src="index.js" type="text/javascript"></script>
+
         </div>
     </div>
 </body>
