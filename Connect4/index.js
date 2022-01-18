@@ -26,12 +26,41 @@ function positionClick (ev) {
     }
     const winnerName = document.getElementById('winner-name')
     winnerName.innerText = winner
+    const winnerScore = document.getElementById('winner-score')
+    winnerScore.innerText = 42 - state.numberOfTurns
     const winnerDisplay = document.getElementById('winner-display')
     winnerDisplay.style.display = 'block'
     winnerDisplay.style.background = winner
-    state.turn = null
+    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+      const gridPosition = document.getElementById(`row-${rowIndex}`)
+      gridPosition.removeEventListener('click', positionClick)
+      console.log(`added positionClick to row-${rowIndex}`)
+    }
   }
   // recordState(state)
+}
+
+// reset game
+function resetGame () {
+  state = createState()
+  document.querySelectorAll('.column').forEach((grid) => {
+    grid.style.background = 'white'
+    grid.classList.remove('fall')
+  })
+  document.getElementById('player-indicator').style.background = 'red'
+  const winnerName = document.getElementById('winner-name')
+  winnerName.innerText = ''
+  const winnerDisplay = document.getElementById('winner-display')
+  winnerDisplay.style.display = 'None'
+  winnerDisplay.style.background = 'blue'
+  // Bind the click events for the grid.
+  for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+    const gridPosition = document.getElementById(`row-${rowIndex}`)
+    gridPosition.addEventListener('click', positionClick)
+    console.log(`added positionClick to row-${rowIndex}`)
+  }
+
+  console.log('resetGame was called')
 }
 
 // Bind the click events for the grid.
@@ -40,3 +69,7 @@ for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
   gridPosition.addEventListener('click', positionClick)
   console.log(`added positionClick to row-${rowIndex}`)
 }
+
+// Bind reset events for the grid
+const resetButton = document.getElementById('reset-button')
+resetButton.addEventListener('click', resetGame)
