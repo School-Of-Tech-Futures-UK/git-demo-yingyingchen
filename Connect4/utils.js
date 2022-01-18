@@ -1,5 +1,34 @@
+// config
+const rowNum = 7
+const colNum = 6
+
+const map = {
+  red: 1,
+  yellow: -1
+}
+
+// create state
+function createState () {
+  const board = []; const _board = []
+  for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+    const colArr = []; const _colArr = []
+    for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
+      colArr.push(null)
+      _colArr.push(0)
+    }
+    board.push([...colArr])
+    _board.push([..._colArr])
+  }
+  return {
+    turn: 'red',
+    numberOfTurns: 0,
+    board: [...board],
+    _board: [..._board]
+  }
+}
+
 // get the lowest available column
-function getAvailableColumn (rowSelected) {
+function getAvailableColumn (rowSelected, state) {
   for (let j = colNum - 1; j >= 0; j--) {
     if (state.board[rowSelected][j] === null) {
       return j
@@ -9,8 +38,8 @@ function getAvailableColumn (rowSelected) {
 }
 
 // play the game and change the game state
-function takeTurn (rowSelected) {
-  const columnSelected = getAvailableColumn(rowSelected)
+function takeTurn (rowSelected, state) {
+  const columnSelected = getAvailableColumn(rowSelected, state)
   const stateCopy = { ...state }
   if (columnSelected !== 'full') {
     if (stateCopy.board[rowSelected][columnSelected] === null) {
@@ -33,7 +62,7 @@ function clearBoard () {
 }
 
 // draw the board at a given state
-function drawBoard () {
+function drawBoard (state) {
   clearBoard()
   for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
     for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
@@ -49,7 +78,7 @@ function drawBoard () {
 
 // check for winner
 function checkWinnerInArray (arr) {
-  for (j = 0; j < arr.length - 3; j++) {
+  for (let j = 0; j < arr.length - 3; j++) {
     const sum = arr.slice(j, j + 4).reduce((prev, curr) => prev + curr, 0)
     if (sum === 4) {
       return 'red'
@@ -60,7 +89,7 @@ function checkWinnerInArray (arr) {
   return null
 }
 
-function checkWinner () {
+function checkWinner (state) {
   let winner = null
   // check row
   for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
@@ -120,8 +149,8 @@ function checkWinner () {
 
   // check if game is finished
   let gameFinish = true
-  for (rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-    for (columnIndex = 0; columnIndex < colNum; columnIndex++) {
+  for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+    for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
       if (state._board[rowIndex][columnIndex] === 0) {
         gameFinish = false
       }
@@ -132,4 +161,11 @@ function checkWinner () {
   }
   // console.log("checkWinner was called");
   return null
+}
+
+export {
+  createState,
+  takeTurn,
+  drawBoard,
+  checkWinner
 }

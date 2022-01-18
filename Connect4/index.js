@@ -1,3 +1,6 @@
+import * as config from './config.js'
+import * as utils from './utils.js'
+
 // append state to json
 // function recordState (state) {
 //   const fs = require('fs')
@@ -11,14 +14,17 @@
 //   })
 // }
 
+// initialize state object
+let state = utils.createState()
+
 // click the column, play the game, record the game state, and check for winner
 function positionClick (ev) {
   const id = ev.target.id
   const rowSelected = id[4]
-  state = takeTurn(rowSelected)
+  state = utils.takeTurn(rowSelected, state)
   document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
-  drawBoard()
-  const winner = checkWinner()
+  utils.drawBoard(state)
+  const winner = utils.checkWinner(state)
   if (winner) {
     if (typeof winner !== 'string' || !['red', 'yellow', 'nobody'].includes(winner)) {
       // eslint-disable-next-line no-throw-literal
@@ -31,7 +37,7 @@ function positionClick (ev) {
     const winnerDisplay = document.getElementById('winner-display')
     winnerDisplay.style.display = 'block'
     winnerDisplay.style.background = winner
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < config.rowNum; rowIndex++) {
       const gridPosition = document.getElementById(`row-${rowIndex}`)
       gridPosition.removeEventListener('click', positionClick)
       console.log(`added positionClick to row-${rowIndex}`)
@@ -42,7 +48,7 @@ function positionClick (ev) {
 
 // reset game
 function resetGame () {
-  state = createState()
+  state = utils.createState()
   document.querySelectorAll('.column').forEach((grid) => {
     grid.style.background = 'white'
     grid.classList.remove('fall')
@@ -54,7 +60,7 @@ function resetGame () {
   winnerDisplay.style.display = 'None'
   winnerDisplay.style.background = 'blue'
   // Bind the click events for the grid.
-  for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+  for (let rowIndex = 0; rowIndex < config.rowNum; rowIndex++) {
     const gridPosition = document.getElementById(`row-${rowIndex}`)
     gridPosition.addEventListener('click', positionClick)
     console.log(`added positionClick to row-${rowIndex}`)
@@ -64,7 +70,7 @@ function resetGame () {
 }
 
 // Bind the click events for the grid.
-for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+for (let rowIndex = 0; rowIndex < config.rowNum; rowIndex++) {
   const gridPosition = document.getElementById(`row-${rowIndex}`)
   gridPosition.addEventListener('click', positionClick)
   console.log(`added positionClick to row-${rowIndex}`)
