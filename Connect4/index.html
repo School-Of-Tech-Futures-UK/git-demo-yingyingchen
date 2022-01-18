@@ -13,6 +13,15 @@
     <div class="card" style="background-color: skyblue; width: 30rem; margin: 0 auto;">
         <div class="card-body positive-relative">
             <h1 class="card-title">Connect 4</h1>
+            <h3 class="card-title">Score Board</h1>
+                <div class="container">
+                    <div class="row" style="height: 50px;">
+                        <div class="column" id="red-score-circle" style="background-color: red;"><span id="red-score"></span></div>
+                    </div>
+                    <div class="row" style="height: 50px;">
+                        <div class="column" id="yellow-score-circle" style="background-color: yellow;"><span id='yellow-score'></span></div>
+                    </div>
+                </div>
             <div class="container">
                 <div class="card-text mx-auto" id="winner-display">The winner is <span id="winner-name"></span>. Score
                     is <span id="winner-score"></span></div>

@@ -1,22 +1,21 @@
 import * as config from './config.js'
 import * as utils from './utils.js'
 
-// append state to json
-// function recordState (state) {
-//   const fs = require('fs')
-//   fs.readFile('state.json', function (err, content) {
-//     if (err) throw err
-//     const parseJson = JSON.parse(content)
-//     parseJson.push(state)
-//     fs.writeFile('data.json', JSON.stringify(parseJson), function (err) {
-//       if (err) throw err
-//     })
-//   })
-// }
-
 // initialize state object
 let state = utils.createState()
-
+const scores = {}
+// get scores data
+function getScores () {
+  fetch('http://localhost:3001/connect4/scores')
+    .then(resp => resp.json())
+    .then(data => {
+      scores.red = data.red
+      scores.yellow = data.yellow
+      document.getElementById('red-score').innerText = scores.red
+      document.getElementById('yellow-score').innerText = scores.yellow
+    })
+}
+getScores()
 // click the column, play the game, record the game state, and check for winner
 function positionClick (ev) {
   const id = ev.target.id
@@ -30,20 +29,31 @@ function positionClick (ev) {
       // eslint-disable-next-line no-throw-literal
       throw "Expecting 'checkWinner' to return null or one of the strings 'red', 'yellow' or 'nobody'. Actually received: " + winner
     }
+    state.winner = winner
+    scores[state.winner] += 42 - state.numberOfTurns
+    fetch('http://localhost:3001/connect4/scores', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(scores)
+    })
+      .then(response => response.json())
+      .then(data => console.log('Success:', data))
     const winnerName = document.getElementById('winner-name')
     winnerName.innerText = winner
     const winnerScore = document.getElementById('winner-score')
-    winnerScore.innerText = 42 - state.numberOfTurns
+    winnerScore.innerText = scores[state.winner]
     const winnerDisplay = document.getElementById('winner-display')
     winnerDisplay.style.display = 'block'
     winnerDisplay.style.background = winner
     for (let rowIndex = 0; rowIndex < config.rowNum; rowIndex++) {
       const gridPosition = document.getElementById(`row-${rowIndex}`)
       gridPosition.removeEventListener('click', positionClick)
-      console.log(`added positionClick to row-${rowIndex}`)
+      console.log(`remove positionClick to row-${rowIndex}`)
     }
+    getScores()
   }
-  // recordState(state)
 }
 
 // reset game
@@ -54,6 +64,8 @@ function resetGame () {
     grid.classList.remove('fall')
   })
   document.getElementById('player-indicator').style.background = 'red'
+  document.getElementById('red-score-circle').style.background = 'red'
+  document.getElementById('yellow-score-circle').style.background = 'yellow'
   const winnerName = document.getElementById('winner-name')
   winnerName.innerText = ''
   const winnerDisplay = document.getElementById('winner-display')
@@ -65,7 +77,7 @@ function resetGame () {
     gridPosition.addEventListener('click', positionClick)
     console.log(`added positionClick to row-${rowIndex}`)
   }
-
+  getScores()
   console.log('resetGame was called')
 }
 

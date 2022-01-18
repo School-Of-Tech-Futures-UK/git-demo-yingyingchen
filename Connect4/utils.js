@@ -22,6 +22,7 @@ function createState () {
   return {
     turn: 'red',
     numberOfTurns: 0,
+    winner: null,
     board: [...board],
     _board: [..._board]
   }
