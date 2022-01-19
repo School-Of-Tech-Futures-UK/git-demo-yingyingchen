@@ -21,7 +21,6 @@
     "eslint-plugin-promise": "^5.2.0"
   },
   "dependencies": {
-    "express": "^4.17.2",
-    "pug": "^3.0.2"
+    "express": "^4.17.2"
   }
 }
