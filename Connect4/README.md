@@ -47,6 +47,6 @@ Open http://localhost:3001/connect4 and start playing!
 * 1.1
 
     * Added api server to track scores
-* [1.0](github.com/School-Of-Tech-Futures-UK/git-demo-yingyingchen/tree/368a5626464dbae863679d9828eb5b24c0ffd5d3)
+* [1.0](http://github.com/School-Of-Tech-Futures-UK/git-demo-yingyingchen/tree/368a5626464dbae863679d9828eb5b24c0ffd5d3)
 
     * Initial Release
