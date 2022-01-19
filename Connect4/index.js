@@ -48,7 +48,12 @@ function positionClick (ev) {
         winnerScore.innerText = 42 - state.numberOfTurns
         const winnerDisplay = document.getElementById('winner-display')
         winnerDisplay.style.display = 'block'
-        winnerDisplay.style.background = winner
+        if (winner === 'red') {
+            winnerDisplay.style.background = 'red'
+        } else if (winner === 'yellow') {
+            winnerDisplay.style.background = 'rgb(255, 217, 0)'
+        }
+
         for (let rowIndex = 0; rowIndex < config.rowNum; rowIndex++) {
             const gridPosition = document.getElementById(`row-${rowIndex}`)
             gridPosition.removeEventListener('click', positionClick)
