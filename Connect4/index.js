@@ -1,4 +1,4 @@
-import { rowNum, createState, takeTurn, drawBoard, checkWinner, getPlayerNames, displayScoreBoard, refreshPage } from './utils.js'
+import { rowNum, createState, takeTurn, drawBoard, checkWinner, getPlayerNames, displayScoreBoard, clearScoreBoard, refreshPage } from './utils.js'
 
 // initialize state object
 let state = createState()
@@ -37,7 +37,7 @@ function positionClick (ev) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(record)
+            body: JSON.stringify({ data: record, clearScoreBoard: false })
         })
             .then(response => response.json())
             .then(data => console.log('Success:', data))
@@ -106,3 +106,5 @@ document.getElementById('scoreBoardCloseButton').addEventListener('click', () =>
 
 const userNameInputButton = document.getElementById('userNameInputButton')
 userNameInputButton.addEventListener('click', () => { getPlayerNames(playersMap) })
+
+document.getElementById('clearScoreBoardButton').addEventListener('click', clearScoreBoard)

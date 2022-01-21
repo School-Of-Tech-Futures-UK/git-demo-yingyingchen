@@ -26,13 +26,13 @@ app.get('/connect4/scores', function (req, res) {
 })
 
 app.post('/connect4/scores', function (req, res) {
-    // const scoresObj = req.body
-    // scores.red = scoresObj.red
-    // scores.yellow = scoresObj.yellow
-    // console.log(req.body)
     const data = fs.readFileSync('scores.json', 'utf8')
     const scores = JSON.parse(data)
-    const newScores = { ...scores, ...req.body }
+    const body = req.body
+    let newScores = {}
+    if (!body.clearScoreBoard) {
+        newScores = { ...scores, ...body.data }
+    }
     console.log(newScores)
     fs.writeFile('scores.json', JSON.stringify(newScores), function (err) {
         if (err) {

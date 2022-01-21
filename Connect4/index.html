@@ -101,6 +101,8 @@
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-outline btn-dark d-block align-self-start"
                     style="color: white; border: 1px white solid" id="reset-button">Reset</button>
+                <button type="button" class="btn btn-outline btn-dark d-block align-self-center"
+                    style="color: white; border: 1px white solid" id="clearScoreBoardButton" data-toggle="modal" data-target="#clearScoreBoardMessageModal">Clear Score Board</button>
                 <button type="button" class="btn btn-outline btn-dark playAgainButton d-none align-self-end"
                     style="color: white; border: 1px white solid" id="playAgainButtonOutside">Play Again</button>
             </div>
@@ -206,6 +208,21 @@
                         Again</button>
                     <button type="button" class="btn btn-outline btn-dark" data-dismiss="modal"
                         id="scoreBoardCloseButton">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- score board cleared message modal -->
+    <div class="modal fade" id="clearScoreBoardMessageModal" tabindex="-1" role="dialog" aria-labelledby="clearScoreBoardMessageModalTitle"
+        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="background-color: darkblue;">
+                <div class="modal-body">
+                    Score Board has been cleared
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-outline btn-dark" data-dismiss="modal">OK</button>
                 </div>
             </div>
         </div>

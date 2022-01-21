@@ -190,6 +190,20 @@ function displayScoreBoard () {
         })
 }
 
+// clear the score board
+function clearScoreBoard () {
+    // post the empty score record to server
+    fetch('http://localhost:3001/connect4/scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data: {}, clearScoreBoard: true })
+    })
+        .then(response => response.json())
+        .then(data => console.log('Success:', data))
+}
+
 // reload the page
 function refreshPage () {
     location.reload()
@@ -204,5 +218,6 @@ export {
     checkWinner,
     getPlayerNames,
     displayScoreBoard,
-    refreshPage
+    refreshPage,
+    clearScoreBoard
 }
