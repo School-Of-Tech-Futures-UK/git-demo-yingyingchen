@@ -80,7 +80,7 @@ function drawBoard (state) {
 // check for winner
 function checkWinnerInArray (arr) {
     for (let j = 0; j < arr.length - 3; j++) {
-        const sum = arr.slice(j, j + 4).reduce((prev, curr) => prev + curr, 0)
+        const sum = arr.slice(j, j + 4).reduce((prev, curr) => prev + curr, 0) // hof
         if (sum === 4) {
             return 'red'
         } else if (sum === -4) {
@@ -149,25 +149,60 @@ function checkWinner (state) {
     }
 
     // check if game is finished
-    // let gameFinish = true
-    // for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-    //   for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
-    //     if (state._board[rowIndex][columnIndex] === 0) {
-    //       gameFinish = false
-    //     }
-    //   }
-    // }
-    // if (gameFinish === true) {
-    //   return 'nobody'
-    // }
     if (state.numberOfTurns === 42) { return 'nobody' }
     console.log('checkWinner was called')
     return null
 }
 
+// get player names
+function getPlayerNames (playersMap) {
+    const redName = document.getElementById('red-name')
+    const yellowName = document.getElementById('yellow-name')
+    if (redName.value && yellowName.value) {
+        playersMap.red = redName.value
+        playersMap.yellow = yellowName.value
+        document.getElementById('player-indicator-name').innerText = playersMap.red
+        const userNameInputButton = document.getElementById('userNameInputButton')
+        userNameInputButton.setAttribute('data-dismiss', 'modal')
+        console.log('Player names are successfully submitted.')
+    } else {
+        redName.placeholder = 'Please enter the name of the red player'
+        yellowName.placeholder = 'Please enter the name of the yellow player'
+    }
+}
+
+// get scores data
+function displayScoreBoard () {
+    fetch('http://localhost:3001/connect4/scores')
+        .then(resp => resp.json())
+        .then(data => {
+            const highestTen = Object.values(data).sort((a, b) => b.score - a.score).slice(0, 10)
+            const tbody = document.getElementById('tbody')
+
+            for (let i = 0; i < highestTen.length; i++) {
+                let tr = '<tr>'
+                /* Must not forget the $ sign */
+                tr += '<td>' + highestTen[i].player + '</td>' + '<td>' + highestTen[i].color + '<td>' + highestTen[i].score.toString() + '</td></tr>'
+
+                /* We add the table row to the table body */
+                tbody.innerHTML += tr
+            }
+        })
+}
+
+// reload the page
+function refreshPage () {
+    location.reload()
+}
+
 export {
+    rowNum,
+    colNum,
     createState,
     takeTurn,
     drawBoard,
-    checkWinner
+    checkWinner,
+    getPlayerNames,
+    displayScoreBoard,
+    refreshPage
 }

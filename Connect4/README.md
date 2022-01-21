@@ -37,7 +37,7 @@ Open http://localhost:3001/connect4 and start playing!
 
 ## How to play
 
-* There are two players: red and yellow. Player red will go first.
+* Enter the name of each player. Player red will go first.
 * At each turn, a player will click on a column and a disc with the player's color will drop to this column. 
 * If one of the players is able to place four discs of the same color in a line, the player is declared as the winner. 
 * Try winning with as little moves as you can.
@@ -47,6 +47,7 @@ Open http://localhost:3001/connect4 and start playing!
 * 1.1
 
     * Added api server to track scores
+    * Added a score board to display the top ten high scores
 * [1.0](http://github.com/School-Of-Tech-Futures-UK/git-demo-yingyingchen/tree/368a5626464dbae863679d9828eb5b24c0ffd5d3)
 
     * Initial Release

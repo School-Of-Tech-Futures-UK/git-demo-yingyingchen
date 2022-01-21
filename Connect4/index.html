@@ -10,19 +10,28 @@
 </head>
 
 <body>
+    <!-- include all the scripts needed -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myModal').modal('toggle');
+        })
+    </script>
+    <script type="module" src="utils.js"></script>
+    <script type="module" src="index.js"></script>
+
     <div class="card" style="background-color: slategrey; width: 30rem; margin: 0 auto;">
         <div class="card-body positive-relative">
             <h1 class="card-title">Connect 4</h1>
-            <h3 class="card-title">Score Board</h1>
-                <div class="card-text">
-                    <div class="row" style="height: 60px;">
-                        <div class="column" id="red-score-circle" style="background-color: red;"><span id="red-score"></span></div>
-                        <div class="column" id="yellow-score-circle" style="background-color: rgb(255, 217, 0);"><span id='yellow-score'></span></div>
-                    </div>
-                </div>
             <div class="container">
-                <div class="card-text mx-auto" id="winner-display">The winner is <span id="winner-name"></span>. Score
-                    is <span id="winner-score"></span></div>
                 <div class="grid mx-auto" id="grid">
                     <div class="row" id="row-0">
                         <div class="column" id="row-0-column-0"></div>
@@ -86,21 +95,119 @@
                 <div class="row" style="height: 50px;">
                     <div class="column" id="player-indicator"></div>
                 </div>
-                <span>your turn</span>
+                <span id="player-indicator-name"></span>
+                <span>, it's your turn</span>
             </div>
 
-            <button type="button" class="btn btn-outline-primary" style="color: white; border: 1px white solid"
+            <button type="button" class="btn btn-outline-primary d-block" style="color: white; border: 1px white solid"
                 id="reset-button">Reset</button>
+            <button type="button" class="btn btn-outline-primary playAgainButton d-none"
+                style="color: white; border: 1px white solid" id="playAgainButtonOutside">Play Again</button>
+        </div>
 
-            <!-- <script type="module" src="config.js"></script> -->
-            <script type="module" src="utils.js"></script>
-            <script type="module" src="index.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-                integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-                crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-                integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-                crossorigin="anonymous"></script>
+
+    </div>
+
+    <!-- button trigger modal -->
+    <button type="button" class="btn btn-primary invisible" data-toggle="modal" data-target="#exampleModalCenter"
+        id="winnerMessageButton">
+        show winner message
+    </button>
+    <button type="button" class="btn btn-primary invisible" data-toggle="modal" data-target="#nobodyWinsModal"
+        id="nobodyWinsButton">
+        show nobody wins
+    </button>
+
+    <!-- player name input modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="background-color: darkblue;">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">Welcome to the Connect 4 game! Please enter each
+                        player's name to play.</h6>
+                </div>
+                <div class="modal-body" style="text-align: left;">
+                    <form id="nameForm">
+                        <div class="form-group">
+                            <label for="red-name-input">Red player:</label>
+                            <input type="text" class="form-control" id="red-name" name="red-name"
+                                placeholder="Enter your name">
+                            <label for="yellow-name-input">Yellow player:</label>
+                            <input type="text" class="form-control" id="yellow-name" name="yellow-name"
+                                placeholder="Enter your name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                    <button type="button" class="btn btn-primary" id="userNameInputButton">Enter</button>
+                    <!-- <input type="submit" value="Enter"> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- winner message modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="background-color: darkblue;">
+                <div class="modal-body">
+                    <span id="winner-name"></span> (<span id="winner-color"></span>) wins in <span
+                        id="winner-score"></span> turns.
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+                        data-target="#scoreBoard" id="scoreBoardButton">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- nobody wins message modal -->
+    <div class="modal fade" id="nobodyWinsModal" tabindex="-1" role="dialog" aria-labelledby="nobodyWinsModalTitle"
+        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="background-color: darkblue;">
+                <div class="modal-body">
+                    Nobody wins.
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+                        data-target="#scoreBoard" id="scoreBoardButtonNobody">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- score board modal -->
+    <div class="modal fade" id="scoreBoard" tabindex="-1" role="dialog" aria-labelledby="scoreBoardTitle"
+        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="background-color: darkblue;">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">High Scores!</h6>
+                </div>
+                <div class="modal-body">
+                    <!-- <span id="recordsText"></span> -->
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Color</th>
+                            <th>Score</th>
+                        </tr>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-secondary playAgainButton" data-dismiss="modal"
+                        id="playAgainButton">Play
+                        Again</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        id="scoreBoardCloseButton">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
