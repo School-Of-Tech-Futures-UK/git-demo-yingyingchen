@@ -1,6 +1,6 @@
 // config
-const rowNum = 7
-const colNum = 6
+// const rowNum = 7
+// const colNum = 6
 
 const map = {
     red: 1,
@@ -8,7 +8,7 @@ const map = {
 }
 
 // create state class
-function createState () {
+function createState (rowNum, colNum, initialPlayer) {
     const board = []; const _board = []
     for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
         const colArr = []; const _colArr = []
@@ -20,7 +20,7 @@ function createState () {
         _board.push([..._colArr])
     }
     return {
-        turn: 'red',
+        turn: initialPlayer,
         numberOfTurns: 0,
         winner: null,
         board: [...board],
@@ -209,15 +209,15 @@ function refreshPage () {
     location.reload()
 }
 
-export {
-    rowNum,
-    colNum,
-    createState,
-    takeTurn,
-    drawBoard,
-    checkWinner,
-    getPlayerNames,
-    displayScoreBoard,
-    refreshPage,
-    clearScoreBoard
+if (typeof exports === 'object') {
+module.exports = {
+        createState,
+        takeTurn,
+        drawBoard,
+        checkWinner,
+        getPlayerNames,
+        displayScoreBoard,
+        refreshPage,
+        clearScoreBoard
+    }
 }

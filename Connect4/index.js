@@ -1,7 +1,18 @@
-import { rowNum, createState, takeTurn, drawBoard, checkWinner, getPlayerNames, displayScoreBoard, clearScoreBoard, refreshPage } from './utils.js'
+// const { createState, takeTurn, drawBoard, checkWinner, getPlayerNames, displayScoreBoard, clearScoreBoard, refreshPage } =  require('./utils')
+const rowNum = 7
+const colNum = 6
+const initialPlayer = 'red'
+
+const functions = ['createState', 'takeTurn', 'drawBoard', 'checkWinner', 'getPlayerNames', 'displayScoreBoard', 'clearScoreBoard', 'refreshPage'];
+for (f of functions) {
+    const functionObject = window[f];
+    if (typeof functionObject !== "function") {
+        throw `Looks like expected function '${f}' is missing. Double check the function signatures from academy.js are still present and unaltered.`;
+    }
+}
 
 // initialize state object
-let state = createState()
+let state = createState(rowNum, colNum, initialPlayer)
 
 const thisTurnRecord = {
     player: '',
@@ -15,7 +26,7 @@ const playersMap = {
 }
 
 // click the column, play the game, record the game state, and check for winner
-function positionClick (ev) {
+function positionClick(ev) {
     const id = ev.target.id
     const rowSelected = id[4]
     state = takeTurn(rowSelected, state)
@@ -60,8 +71,8 @@ function positionClick (ev) {
 }
 
 // reset game
-function resetGame () {
-    state = createState()
+function resetGame() {
+    state = createState(rowNum, colNum, initialPlayer)
     document.querySelectorAll('.column').forEach((grid) => {
         grid.style.background = 'white'
         grid.classList.remove('fall')
@@ -83,28 +94,31 @@ function resetGame () {
 }
 
 // Bind the click events for the grid.
-for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-    const gridPosition = document.getElementById(`row-${rowIndex}`)
-    gridPosition.addEventListener('click', positionClick)
-    console.log(`added positionClick to row-${rowIndex}`)
+window.onload = () => {
+    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+        const gridPosition = document.getElementById(`row-${rowIndex}`)
+        gridPosition.addEventListener('click', positionClick)
+        console.log(`added positionClick to row-${rowIndex}`)
+    }
+
+    // Bind reset events for the grid
+    document.querySelectorAll('.playAgainButton').forEach(i => i.addEventListener(
+        'click', resetGame))
+
+    const resetButton = document.getElementById('reset-button')
+    resetButton.addEventListener('click', refreshPage)
+
+    document.getElementById('scoreBoardButton').addEventListener('click', displayScoreBoard)
+    document.getElementById('scoreBoardButtonNobody').addEventListener('click', displayScoreBoard)
+    document.getElementById('scoreBoardCloseButton').addEventListener('click', () => {
+        const classList = document.getElementById('playAgainButtonOutside').classList
+        classList.remove('d-none')
+        classList.add('d-block')
+    })
+
+    const userNameInputButton = document.getElementById('userNameInputButton')
+    userNameInputButton.addEventListener('click', () => { getPlayerNames(playersMap) })
+
+    document.getElementById('clearScoreBoardButton').addEventListener('click', clearScoreBoard)
 }
 
-// Bind reset events for the grid
-document.querySelectorAll('.playAgainButton').forEach(i => i.addEventListener(
-    'click', resetGame))
-
-const resetButton = document.getElementById('reset-button')
-resetButton.addEventListener('click', refreshPage)
-
-document.getElementById('scoreBoardButton').addEventListener('click', displayScoreBoard)
-document.getElementById('scoreBoardButtonNobody').addEventListener('click', displayScoreBoard)
-document.getElementById('scoreBoardCloseButton').addEventListener('click', () => {
-    const classList = document.getElementById('playAgainButtonOutside').classList
-    classList.remove('d-none')
-    classList.add('d-block')
-})
-
-const userNameInputButton = document.getElementById('userNameInputButton')
-userNameInputButton.addEventListener('click', () => { getPlayerNames(playersMap) })
-
-document.getElementById('clearScoreBoardButton').addEventListener('click', clearScoreBoard)
