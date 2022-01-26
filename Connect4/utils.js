@@ -1,60 +1,78 @@
-// config
-// const rowNum = 7
-// const colNum = 6
-
-const map = {
-    red: 1,
-    yellow: -1
-}
-
 // create state class
-function createState (rowNum, colNum, initialPlayer) {
-    const board = []; const _board = []
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-        const colArr = []; const _colArr = []
-        for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
-            colArr.push(null)
-            _colArr.push(0)
+class State {
+    constructor(rowNum, colNum, initialPlayerColor) {
+        this.rowNum = rowNum
+        this.colNum = colNum
+        this.board = []
+        this._board = []
+        this.turn = ''
+        this.numberOfTurns = 0
+        this.winnerRecord = {
+            player: '',
+            color: '',
+            score: 0
         }
-        board.push([...colArr])
-        _board.push([..._colArr])
+
+        this.nameColorMap = {
+            red: '',
+            yellow: ''
+        }
+        this.createState(initialPlayerColor)
     }
-    return {
-        turn: initialPlayer,
-        numberOfTurns: 0,
-        winner: null,
-        board: [...board],
-        _board: [..._board]
+
+    createState(initialPlayerColor) {
+        for (let rowIndex = 0; rowIndex < this.rowNum; rowIndex++) {
+            const colArr = []; const _colArr = []
+            for (let columnIndex = 0; columnIndex < this.colNum; columnIndex++) {
+                colArr.push(null)
+                _colArr.push(0)
+            }
+            this.board.push([...colArr])
+            this._board.push([..._colArr])
+        }
+        this.turn = initialPlayerColor
+    }
+
+    setNameColorMap(redPlayerName, yellowPlayerName) {
+        this.nameColorMap.red = redPlayerName
+        this.nameColorMap.yellow = yellowPlayerName
+    }
+
+    setWinnerRecord(winnerColor) {
+        this.winnerRecord.color = winnerColor 
+        this.winnerRecord.player = this.nameColorMap[winnerColor]
+        this.winnerRecord.score = 42 - this.numberOfTurns
     }
 }
 
-// get the lowest available column
-function getAvailableColumn (rowSelected, state) {
-    for (let j = colNum - 1; j >= 0; j--) {
-        if (state.board[rowSelected][j] === null) {
-            return j
-        }
-    }
-    return 'full'
+function isColumnAvailable(rowSelected, board) {
+    return board[rowSelected].includes(null)
 }
 
-// play the game and change the game state
-function takeTurn (rowSelected, state) {
-    const columnSelected = getAvailableColumn(rowSelected, state)
-    const stateCopy = { ...state }
-    if (columnSelected !== 'full') {
-        if (stateCopy.board[rowSelected][columnSelected] === null) {
-            stateCopy.board[rowSelected][columnSelected] = stateCopy.turn
-            stateCopy._board[rowSelected][columnSelected] = map[stateCopy.turn]
-            stateCopy.turn = (stateCopy.turn === 'yellow') ? 'red' : 'yellow'
-            stateCopy.numberOfTurns++
-        }
+function takeTurn(rowSelected, state) {
+    const map = {
+        red: 1,
+        yellow: -1
     }
-    return stateCopy
+    if (isColumnAvailable(rowSelected, state.board)) {
+        const stateCopy = state
+        const nullArr = stateCopy.board[rowSelected].filter(x => !x)
+        const newArr = stateCopy.board[rowSelected].filter(x => x)
+        newArr.push(stateCopy.turn)
+        const zeroArr = stateCopy._board[rowSelected].filter(x => x === 0)
+        const newArrMap = stateCopy._board[rowSelected].filter(x => x !== 0)
+        newArrMap.push(map[stateCopy.turn])
+        stateCopy.board[rowSelected] = [...newArr, ...nullArr.slice(0, nullArr.length - 1)]
+        stateCopy._board[rowSelected] = [...newArrMap, ...zeroArr.slice(0, zeroArr.length - 1)]
+        stateCopy.turn = (stateCopy.turn === 'yellow') ? 'red' : 'yellow'
+        stateCopy.numberOfTurns++
+        return stateCopy
+    }
+    return state
 }
 
 // clear the board
-function clearBoard () {
+function clearBoard() {
     for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
         for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
             document.getElementById(`row-${rowIndex}-column-${columnIndex}`).style.background = 'white'
@@ -63,7 +81,7 @@ function clearBoard () {
 }
 
 // draw the board at a given state
-function drawBoard (state) {
+function drawBoard(state) {
     clearBoard()
     for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
         for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
@@ -78,7 +96,7 @@ function drawBoard (state) {
 }
 
 // check for winner
-function checkWinnerInArray (arr) {
+function checkWinnerInArray(arr) {
     for (let j = 0; j < arr.length - 3; j++) {
         const sum = arr.slice(j, j + 4).reduce((prev, curr) => prev + curr, 0) // hof
         if (sum === 4) {
@@ -90,10 +108,10 @@ function checkWinnerInArray (arr) {
     return null
 }
 
-function checkWinner (state) {
+function checkWinner(state) {
     let winner = null
     // check row
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < state.rowNum; rowIndex++) {
         const rowChecking = state._board[rowIndex]
         winner = checkWinnerInArray(rowChecking)
         if (winner) {
@@ -102,9 +120,9 @@ function checkWinner (state) {
     }
 
     // check col
-    for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
+    for (let columnIndex = 0; columnIndex < state.colNum; columnIndex++) {
         const columnChecking = []
-        for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+        for (let rowIndex = 0; rowIndex < state.rowNum; rowIndex++) {
             columnChecking.push(state._board[rowIndex][columnIndex])
         }
         winner = checkWinnerInArray(columnChecking)
@@ -114,12 +132,12 @@ function checkWinner (state) {
     }
 
     // check top left to bottom right
-    const maxLength = Math.max(rowNum, colNum)
+    const maxLength = Math.max(state.rowNum, state.colNum)
     for (let k = 0; k <= 2 * (maxLength - 1); k++) {
         const diagChecking = []
-        for (let y = rowNum - 1; y >= 0; y--) {
+        for (let y = state.rowNum - 1; y >= 0; y--) {
             const x = k - y
-            if (x >= 0 && x < colNum) {
+            if (x >= 0 && x < state.colNum) {
                 diagChecking.push(state._board[y][x])
             }
         }
@@ -134,9 +152,9 @@ function checkWinner (state) {
     // check bottom left to top right
     for (let k = 0; k <= 2 * (maxLength - 1); k++) {
         const diagChecking = []
-        for (let y = rowNum - 1; y >= 0; y--) {
-            const x = k - (rowNum - y)
-            if (x >= 0 && x < colNum) {
+        for (let y = state.rowNum - 1; y >= 0; y--) {
+            const x = k - (state.rowNum - y)
+            if (x >= 0 && x < state.colNum) {
                 diagChecking.push(state._board[y][x])
             }
         }
@@ -155,7 +173,7 @@ function checkWinner (state) {
 }
 
 // get player names
-function getPlayerNames (playersMap) {
+function getPlayerNames(playersMap) {
     const redName = document.getElementById('red-name')
     const yellowName = document.getElementById('yellow-name')
     if (redName.value && yellowName.value) {
@@ -172,7 +190,7 @@ function getPlayerNames (playersMap) {
 }
 
 // get scores data
-function displayScoreBoard () {
+function displayScoreBoard() {
     fetch('http://localhost:3001/connect4/scores')
         .then(resp => resp.json())
         .then(data => {
@@ -191,7 +209,7 @@ function displayScoreBoard () {
 }
 
 // clear the score board
-function clearScoreBoard () {
+function clearScoreBoard() {
     // post the empty score record to server
     fetch('http://localhost:3001/connect4/scores', {
         method: 'POST',
@@ -205,13 +223,14 @@ function clearScoreBoard () {
 }
 
 // reload the page
-function refreshPage () {
+function refreshPage() {
     location.reload()
 }
 
 if (typeof exports === 'object') {
-module.exports = {
-        createState,
+    module.exports = {
+        State,
+        isColumnAvailable,
         takeTurn,
         drawBoard,
         checkWinner,

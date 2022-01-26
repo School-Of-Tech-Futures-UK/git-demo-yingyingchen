@@ -1,9 +1,10 @@
 // const { createState, takeTurn, drawBoard, checkWinner, getPlayerNames, displayScoreBoard, clearScoreBoard, refreshPage } =  require('./utils')
 const rowNum = 7
 const colNum = 6
-const initialPlayer = 'red'
+const initialPlayerColor = 'red'
+let state = new State(rowNum, colNum, initialPlayerColor)
 
-const functions = ['createState', 'takeTurn', 'drawBoard', 'checkWinner', 'getPlayerNames', 'displayScoreBoard', 'clearScoreBoard', 'refreshPage'];
+const functions = ['takeTurn', 'drawBoard', 'checkWinner', 'getPlayerNames', 'displayScoreBoard', 'clearScoreBoard', 'refreshPage'];
 for (f of functions) {
     const functionObject = window[f];
     if (typeof functionObject !== "function") {
@@ -12,18 +13,17 @@ for (f of functions) {
 }
 
 // initialize state object
-let state = createState(rowNum, colNum, initialPlayer)
+// let state = createState(rowNum, colNum, initialPlayer)
+// const thisTurnRecord = {
+//     player: '',
+//     color: '',
+//     score: 0
+// }
 
-const thisTurnRecord = {
-    player: '',
-    color: '',
-    score: 0
-}
-
-const playersMap = {
-    red: '',
-    yellow: ''
-}
+// const playersMap= {
+//     red: '',
+//     yellow: ''
+// }
 
 // click the column, play the game, record the game state, and check for winner
 function positionClick(ev) {
@@ -31,17 +31,15 @@ function positionClick(ev) {
     const rowSelected = id[4]
     state = takeTurn(rowSelected, state)
     document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
-    document.getElementById('player-indicator-name').innerText = playersMap[state.turn] ? playersMap[state.turn] : playersMap.red
+    document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
     drawBoard(state)
-    const winner = checkWinner(state)
-    if (winner === 'red' || winner === 'yellow') {
-        state.winner = winner
-        thisTurnRecord.player = playersMap[state.winner]
-        thisTurnRecord.color = state.winner
-        thisTurnRecord.score = 42 - state.numberOfTurns
+    const winnerColor = checkWinner(state)
+    if (winnerColor === 'red' || winnerColor === 'yellow') {
+        // state.winner = winner
+        state.setWinnerRecord(winnerColor)
         const idByTimeStamp = new Date().getTime()
         const record = {}
-        record[idByTimeStamp] = { ...thisTurnRecord }
+        record[idByTimeStamp] = { ...state.winnerRecord }
         // post the new score record to server
         fetch('http://localhost:3001/connect4/scores', {
             method: 'POST',
@@ -53,26 +51,20 @@ function positionClick(ev) {
             .then(response => response.json())
             .then(data => console.log('Success:', data))
         // display the winner information
-        const winnerName = document.getElementById('winner-name')
-        winnerName.innerText = thisTurnRecord.player
-        const winnerColor = document.getElementById('winner-color')
-        winnerColor.innerText = thisTurnRecord.color
-        const winnerScore = document.getElementById('winner-score')
-        winnerScore.innerText = 42 - thisTurnRecord.score
+        document.getElementById('winner-name').innerText = state.winnerRecord.player
+        document.getElementById('winner-color').innerText = state.winnerRecord.color
+        document.getElementById('winner-score').innerText = state.numberOfTurns
         document.getElementById('winnerMessageButton').click()
-        for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-            const gridPosition = document.getElementById(`row-${rowIndex}`)
-            gridPosition.removeEventListener('click', positionClick)
-            console.log(`remove positionClick to row-${rowIndex}`)
-        }
-    } else if (winner === 'nobody') {
+        document.querySelectorAll('.row').forEach(i => i.removeEventListener(
+            'click', positionClick))
+    } else if (winnerColor === 'nobody') {
         document.getElementById('nobodyWinsButton').click()
     }
 }
 
 // reset game
 function resetGame() {
-    state = createState(rowNum, colNum, initialPlayer)
+    state = new State(rowNum, colNum, initialPlayerColor)
     document.querySelectorAll('.column').forEach((grid) => {
         grid.style.background = 'white'
         grid.classList.remove('fall')
@@ -81,11 +73,8 @@ function resetGame() {
     const winnerName = document.getElementById('winner-name')
     winnerName.innerText = ''
     // Bind the click events for the grid.
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-        const gridPosition = document.getElementById(`row-${rowIndex}`)
-        gridPosition.addEventListener('click', positionClick)
-        console.log(`added positionClick to row-${rowIndex}`)
-    }
+    document.querySelectorAll('.row').forEach(i => i.addEventListener(
+        'click', positionClick))
     document.getElementById('tbody').innerHTML = ''
     const classList = document.getElementById('playAgainButtonOutside').classList
     classList.remove('d-block')
@@ -93,13 +82,11 @@ function resetGame() {
     console.log('resetGame was called')
 }
 
-// Bind the click events for the grid.
+
 window.onload = () => {
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-        const gridPosition = document.getElementById(`row-${rowIndex}`)
-        gridPosition.addEventListener('click', positionClick)
-        console.log(`added positionClick to row-${rowIndex}`)
-    }
+    // Bind the click events for the grid.
+    document.querySelectorAll('.row').forEach(i => i.addEventListener(
+        'click', positionClick))
 
     // Bind reset events for the grid
     document.querySelectorAll('.playAgainButton').forEach(i => i.addEventListener(
@@ -117,7 +104,7 @@ window.onload = () => {
     })
 
     const userNameInputButton = document.getElementById('userNameInputButton')
-    userNameInputButton.addEventListener('click', () => { getPlayerNames(playersMap) })
+    userNameInputButton.addEventListener('click', () => { getPlayerNames(state.nameColorMap) })
 
     document.getElementById('clearScoreBoardButton').addEventListener('click', clearScoreBoard)
 }
