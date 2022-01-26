@@ -22,15 +22,8 @@ class State {
     }
 
     createState(rowNum, colNum, initialPlayerColor) {
-        for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-            const colArr = []; const _colArr = []
-            for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
-                colArr.push(null)
-                _colArr.push(0)
-            }
-            this.board.push([...colArr])
-            this._board.push([..._colArr])
-        }
+        this.board = Array(rowNum).fill(null).map(() => Array(colNum).fill(null))
+        this._board = Array(rowNum).fill(null).map(() => Array(colNum).fill(0))
         this.turn = initialPlayerColor
     }
 
