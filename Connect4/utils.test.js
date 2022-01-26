@@ -1,4 +1,4 @@
-const { State, takeTurn, checkWinner, checkWinnerInArray } = require('./utils.js')
+const { State, copyStateInstance, takeTurn, checkWinner, checkWinnerInArray } = require('./utils.js')
 
 let state
 
@@ -6,15 +6,38 @@ beforeEach(() => {
     state = new State(7, 6, 'red')
 })
 
+describe('When calling the copyStateInstance function', () => {
+    it('should return the same state', () => {
+        const stateCopy = copyStateInstance(state)
+        expect(stateCopy).toStrictEqual(state)
+    })
+    it('the original state will not change when the copied state has been changed', () => {
+        const stateCopy = copyStateInstance(state)
+        stateCopy.turn = 'yellow'
+        stateCopy.board[1][0] = 'red'
+        stateCopy._board[1][0] = 1
+        stateCopy.winnerRecord.player = 'A253'
+        stateCopy.nameColorMap.red = 'A253'
+
+
+        expect(state.turn).toBe('red')
+        expect(state.board[1][0]).toBe(null)
+        expect(state._board[1][0]).toBe(0)
+        expect(state.winnerRecord.player).toBe('')
+        expect(state.nameColorMap.red).toBe('')
+    })
+})
+
+
 describe('When calling the takeTurn function', () => {
     it('should return a correct new state', () => {
         const rowSelected = 1
         const output = takeTurn(rowSelected, state)
         state.turn = 'yellow'
-        state.board[1][5] = 'red'
-        state._board[1][5] = 1
+        state.board[1][0] = 'red'
+        state._board[1][0] = 1
         state.numberOfTurns++
-        expect(output).toStrictEqual(state)
+        expect(output.board).toStrictEqual(state.board)
     })
 
     it('should return the same state when the selected row is full', () => {

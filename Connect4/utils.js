@@ -1,6 +1,9 @@
 // create state class
 class State {
     constructor(rowNum, colNum, initialPlayerColor) {
+        this.rowNum = rowNum
+        this.colNum = colNum
+        this.initialPlayerColor = initialPlayerColor
         this.board = []
         this._board = []
         this.turn = ''
@@ -47,13 +50,24 @@ class State {
     }
 }
 
+function copyStateInstance(state){
+    let stateCopy = new State(state.rowNum, state.colNum, state.initialPlayerColor)
+    stateCopy.board = state.board.map(x => x.slice())
+    stateCopy._board = state._board.map(x => x.slice())
+    stateCopy.turn = state.turn
+    stateCopy.numberOfTurns = state.numberOfTurns
+    stateCopy.winnerRecord = {...state.winnerRecord}
+    stateCopy.nameColorMap = {...state.nameColorMap}
+    return stateCopy
+}
+
 function takeTurn(rowSelected, state) {
     const map = {
         red: 1,
         yellow: -1
     }
+    const stateCopy = copyStateInstance(state)
     if (state.isRowAvailable(rowSelected)) {
-        const stateCopy = state
         // push one piece into the board
         const nullArr = stateCopy.board[rowSelected].filter(x => !x)
         const newArr = stateCopy.board[rowSelected].filter(x => x)
@@ -68,9 +82,8 @@ function takeTurn(rowSelected, state) {
         // increase number of turns played
         stateCopy.numberOfTurns++
         // return new state
-        return stateCopy
     }
-    return state
+    return stateCopy
 }
 
 
@@ -159,6 +172,7 @@ function checkWinner(state) {
 if (typeof exports === 'object') {
     module.exports = {
         State,
+        copyStateInstance,
         takeTurn,
         checkWinnerInArray,
         checkWinner,
