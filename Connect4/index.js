@@ -4,26 +4,13 @@ const colNum = 6
 const initialPlayerColor = 'red'
 let state = new State(rowNum, colNum, initialPlayerColor)
 
-const functions = ['takeTurn', 'drawBoard', 'checkWinner', 'getPlayerNames', 'displayScoreBoard', 'clearScoreBoard', 'refreshPage'];
+const functions = ['takeTurn', 'checkWinner'];
 for (f of functions) {
     const functionObject = window[f];
     if (typeof functionObject !== "function") {
         throw `Looks like expected function '${f}' is missing. Double check the function signatures from academy.js are still present and unaltered.`;
     }
 }
-
-// initialize state object
-// let state = createState(rowNum, colNum, initialPlayer)
-// const thisTurnRecord = {
-//     player: '',
-//     color: '',
-//     score: 0
-// }
-
-// const playersMap= {
-//     red: '',
-//     yellow: ''
-// }
 
 // click the column, play the game, record the game state, and check for winner
 function positionClick(ev) {
@@ -62,6 +49,31 @@ function positionClick(ev) {
     }
 }
 
+// clear the board
+function clearBoard() {
+    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+        for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
+            document.getElementById(`row-${rowIndex}-column-${columnIndex}`).style.background = 'white'
+        }
+    }
+    return 'board has been cleared'
+}
+
+// draw the board at a given state
+function drawBoard(state) {
+    clearBoard()
+    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+        for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
+            if (!state.board[rowIndex][columnIndex]) {
+                continue
+            }
+            const color = state.board[rowIndex][columnIndex]
+            document.getElementById(`row-${rowIndex}-column-${columnIndex}`).classList.add('fall')
+            document.getElementById(`row-${rowIndex}-column-${columnIndex}`).style.background = color
+        }
+    }
+}
+
 // reset game
 function resetGame() {
     state = new State(rowNum, colNum, initialPlayerColor)
@@ -82,6 +94,60 @@ function resetGame() {
     console.log('resetGame was called')
 }
 
+// get player names
+function getPlayerNames(playersMap) {
+    const redName = document.getElementById('red-name')
+    const yellowName = document.getElementById('yellow-name')
+    if (redName.value && yellowName.value) {
+        playersMap.red = redName.value
+        playersMap.yellow = yellowName.value
+        document.getElementById('player-indicator-name').innerText = playersMap.red
+        const userNameInputButton = document.getElementById('userNameInputButton')
+        userNameInputButton.setAttribute('data-dismiss', 'modal')
+        console.log('Player names are successfully submitted.')
+    } else {
+        redName.placeholder = 'Please enter the name of the red player'
+        yellowName.placeholder = 'Please enter the name of the yellow player'
+    }
+}
+
+// get scores data
+function displayScoreBoard() {
+    fetch('http://localhost:3001/connect4/scores')
+        .then(resp => resp.json())
+        .then(data => {
+            const highestTen = Object.values(data).sort((a, b) => b.score - a.score).slice(0, 10)
+            const tbody = document.getElementById('tbody')
+
+            for (let i = 0; i < highestTen.length; i++) {
+                let tr = '<tr>'
+                /* Must not forget the $ sign */
+                tr += '<td>' + highestTen[i].player + '</td>' + '<td>' + highestTen[i].color + '<td>' + highestTen[i].score.toString() + '</td></tr>'
+
+                /* We add the table row to the table body */
+                tbody.innerHTML += tr
+            }
+        })
+}
+
+// clear the score board
+function clearScoreBoard() {
+    // post the empty score record to server
+    fetch('http://localhost:3001/connect4/scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ data: {}, clearScoreBoard: true })
+    })
+        .then(response => response.json())
+        .then(data => console.log('Success:', data))
+}
+
+// reload the page
+function refreshPage() {
+    location.reload()
+}
 
 window.onload = () => {
     // Bind the click events for the grid.

@@ -1,8 +1,6 @@
 // create state class
 class State {
     constructor(rowNum, colNum, initialPlayerColor) {
-        this.rowNum = rowNum
-        this.colNum = colNum
         this.board = []
         this._board = []
         this.turn = ''
@@ -17,13 +15,13 @@ class State {
             red: '',
             yellow: ''
         }
-        this.createState(initialPlayerColor)
+        this.createState(rowNum, colNum, initialPlayerColor)
     }
 
-    createState(initialPlayerColor) {
-        for (let rowIndex = 0; rowIndex < this.rowNum; rowIndex++) {
+    createState(rowNum, colNum, initialPlayerColor) {
+        for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
             const colArr = []; const _colArr = []
-            for (let columnIndex = 0; columnIndex < this.colNum; columnIndex++) {
+            for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
                 colArr.push(null)
                 _colArr.push(0)
             }
@@ -43,10 +41,10 @@ class State {
         this.winnerRecord.player = this.nameColorMap[winnerColor]
         this.winnerRecord.score = 42 - this.numberOfTurns
     }
-}
 
-function isColumnAvailable(rowSelected, board) {
-    return board[rowSelected].includes(null)
+    isRowAvailable(rowSelected) {
+        return this.board[rowSelected].includes(null)
+    }
 }
 
 function takeTurn(rowSelected, state) {
@@ -54,8 +52,9 @@ function takeTurn(rowSelected, state) {
         red: 1,
         yellow: -1
     }
-    if (isColumnAvailable(rowSelected, state.board)) {
+    if (state.isRowAvailable(rowSelected)) {
         const stateCopy = state
+        // push one piece into the board
         const nullArr = stateCopy.board[rowSelected].filter(x => !x)
         const newArr = stateCopy.board[rowSelected].filter(x => x)
         newArr.push(stateCopy.turn)
@@ -64,36 +63,17 @@ function takeTurn(rowSelected, state) {
         newArrMap.push(map[stateCopy.turn])
         stateCopy.board[rowSelected] = [...newArr, ...nullArr.slice(0, nullArr.length - 1)]
         stateCopy._board[rowSelected] = [...newArrMap, ...zeroArr.slice(0, zeroArr.length - 1)]
+        // change turn 
         stateCopy.turn = (stateCopy.turn === 'yellow') ? 'red' : 'yellow'
+        // increase number of turns played
         stateCopy.numberOfTurns++
+        // return new state
         return stateCopy
     }
     return state
 }
 
-// clear the board
-function clearBoard() {
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-        for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
-            document.getElementById(`row-${rowIndex}-column-${columnIndex}`).style.background = 'white'
-        }
-    }
-}
 
-// draw the board at a given state
-function drawBoard(state) {
-    clearBoard()
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-        for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
-            if (!state.board[rowIndex][columnIndex]) {
-                continue
-            }
-            const color = state.board[rowIndex][columnIndex]
-            document.getElementById(`row-${rowIndex}-column-${columnIndex}`).classList.add('fall')
-            document.getElementById(`row-${rowIndex}-column-${columnIndex}`).style.background = color
-        }
-    }
-}
 
 // check for winner
 function checkWinnerInArray(arr) {
@@ -109,9 +89,11 @@ function checkWinnerInArray(arr) {
 }
 
 function checkWinner(state) {
+    const rowNum = state.board.length
+    const colNum = state.board[0].length
     let winner = null
     // check row
-    for (let rowIndex = 0; rowIndex < state.rowNum; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
         const rowChecking = state._board[rowIndex]
         winner = checkWinnerInArray(rowChecking)
         if (winner) {
@@ -120,9 +102,9 @@ function checkWinner(state) {
     }
 
     // check col
-    for (let columnIndex = 0; columnIndex < state.colNum; columnIndex++) {
+    for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
         const columnChecking = []
-        for (let rowIndex = 0; rowIndex < state.rowNum; rowIndex++) {
+        for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
             columnChecking.push(state._board[rowIndex][columnIndex])
         }
         winner = checkWinnerInArray(columnChecking)
@@ -132,12 +114,12 @@ function checkWinner(state) {
     }
 
     // check top left to bottom right
-    const maxLength = Math.max(state.rowNum, state.colNum)
+    const maxLength = Math.max(rowNum, colNum)
     for (let k = 0; k <= 2 * (maxLength - 1); k++) {
         const diagChecking = []
-        for (let y = state.rowNum - 1; y >= 0; y--) {
+        for (let y = rowNum - 1; y >= 0; y--) {
             const x = k - y
-            if (x >= 0 && x < state.colNum) {
+            if (x >= 0 && x < colNum) {
                 diagChecking.push(state._board[y][x])
             }
         }
@@ -152,9 +134,9 @@ function checkWinner(state) {
     // check bottom left to top right
     for (let k = 0; k <= 2 * (maxLength - 1); k++) {
         const diagChecking = []
-        for (let y = state.rowNum - 1; y >= 0; y--) {
-            const x = k - (state.rowNum - y)
-            if (x >= 0 && x < state.colNum) {
+        for (let y = rowNum - 1; y >= 0; y--) {
+            const x = k - (rowNum - y)
+            if (x >= 0 && x < colNum) {
                 diagChecking.push(state._board[y][x])
             }
         }
@@ -168,75 +150,17 @@ function checkWinner(state) {
 
     // check if game is finished
     if (state.numberOfTurns === 42) { return 'nobody' }
-    console.log('checkWinner was called')
     return null
 }
 
-// get player names
-function getPlayerNames(playersMap) {
-    const redName = document.getElementById('red-name')
-    const yellowName = document.getElementById('yellow-name')
-    if (redName.value && yellowName.value) {
-        playersMap.red = redName.value
-        playersMap.yellow = yellowName.value
-        document.getElementById('player-indicator-name').innerText = playersMap.red
-        const userNameInputButton = document.getElementById('userNameInputButton')
-        userNameInputButton.setAttribute('data-dismiss', 'modal')
-        console.log('Player names are successfully submitted.')
-    } else {
-        redName.placeholder = 'Please enter the name of the red player'
-        yellowName.placeholder = 'Please enter the name of the yellow player'
-    }
-}
 
-// get scores data
-function displayScoreBoard() {
-    fetch('http://localhost:3001/connect4/scores')
-        .then(resp => resp.json())
-        .then(data => {
-            const highestTen = Object.values(data).sort((a, b) => b.score - a.score).slice(0, 10)
-            const tbody = document.getElementById('tbody')
 
-            for (let i = 0; i < highestTen.length; i++) {
-                let tr = '<tr>'
-                /* Must not forget the $ sign */
-                tr += '<td>' + highestTen[i].player + '</td>' + '<td>' + highestTen[i].color + '<td>' + highestTen[i].score.toString() + '</td></tr>'
-
-                /* We add the table row to the table body */
-                tbody.innerHTML += tr
-            }
-        })
-}
-
-// clear the score board
-function clearScoreBoard() {
-    // post the empty score record to server
-    fetch('http://localhost:3001/connect4/scores', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ data: {}, clearScoreBoard: true })
-    })
-        .then(response => response.json())
-        .then(data => console.log('Success:', data))
-}
-
-// reload the page
-function refreshPage() {
-    location.reload()
-}
 
 if (typeof exports === 'object') {
     module.exports = {
         State,
-        isColumnAvailable,
         takeTurn,
-        drawBoard,
+        checkWinnerInArray,
         checkWinner,
-        getPlayerNames,
-        displayScoreBoard,
-        refreshPage,
-        clearScoreBoard
     }
 }
