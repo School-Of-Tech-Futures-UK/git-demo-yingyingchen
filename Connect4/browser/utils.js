@@ -33,7 +33,7 @@ class State {
     }
 
     setWinnerRecord(winnerColor) {
-        this.winnerRecord.color = winnerColor 
+        this.winnerRecord.color = winnerColor
         this.winnerRecord.player = this.nameColorMap[winnerColor]
         this.winnerRecord.score = 42 - this.numberOfTurns
     }
@@ -43,14 +43,14 @@ class State {
     }
 }
 
-function copyStateInstance(state){
+function copyStateInstance(state) {
     let stateCopy = new State(state.rowNum, state.colNum, state.initialPlayerColor)
     stateCopy.board = state.board.map(x => x.slice())
     stateCopy._board = state._board.map(x => x.slice())
     stateCopy.turn = state.turn
     stateCopy.numberOfTurns = state.numberOfTurns
-    stateCopy.winnerRecord = {...state.winnerRecord}
-    stateCopy.nameColorMap = {...state.nameColorMap}
+    stateCopy.winnerRecord = { ...state.winnerRecord }
+    stateCopy.nameColorMap = { ...state.nameColorMap }
     return stateCopy
 }
 
@@ -94,13 +94,13 @@ function checkWinnerInArray(arr) {
     return null
 }
 
-function checkWinner(state) {
-    const rowNum = state.board.length
-    const colNum = state.board[0].length
+function checkWinner(board) {
+    const rowNum = board.length
+    const colNum = board[0].length
     let winner = null
     // check row
     for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-        const rowChecking = state._board[rowIndex]
+        const rowChecking = board[rowIndex]
         winner = checkWinnerInArray(rowChecking)
         if (winner) {
             return winner
@@ -111,7 +111,7 @@ function checkWinner(state) {
     for (let columnIndex = 0; columnIndex < colNum; columnIndex++) {
         const columnChecking = []
         for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-            columnChecking.push(state._board[rowIndex][columnIndex])
+            columnChecking.push(board[rowIndex][columnIndex])
         }
         winner = checkWinnerInArray(columnChecking)
         if (winner) {
@@ -126,7 +126,7 @@ function checkWinner(state) {
         for (let y = rowNum - 1; y >= 0; y--) {
             const x = k - y
             if (x >= 0 && x < colNum) {
-                diagChecking.push(state._board[y][x])
+                diagChecking.push(board[y][x])
             }
         }
         if (diagChecking.length > 3) {
@@ -143,7 +143,7 @@ function checkWinner(state) {
         for (let y = rowNum - 1; y >= 0; y--) {
             const x = k - (rowNum - y)
             if (x >= 0 && x < colNum) {
-                diagChecking.push(state._board[y][x])
+                diagChecking.push(board[y][x])
             }
         }
         if (diagChecking.length > 3) {
@@ -155,12 +155,9 @@ function checkWinner(state) {
     }
 
     // check if game is finished
-    if (state.numberOfTurns === 42) { return 'nobody' }
+    if (!board.some(x => x.includes(0))) { return 'nobody' }
     return null
 }
-
-
-
 
 if (typeof exports === 'object') {
     module.exports = {

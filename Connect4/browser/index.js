@@ -13,8 +13,8 @@ for (f of functions) {
 }
 
 // click the column, play the game, record the game state, and check for winner
-function positionClick(ev) {
-    const id = ev.target.id
+function positionClick(event) {
+    const id = event.target.id
     const rowSelected = id[4]
     // update game state after placing a disc
     state = takeTurn(rowSelected, state)
@@ -24,7 +24,7 @@ function positionClick(ev) {
     // draw the grid with the given state
     drawBoard(state)
     // check for winner
-    const winnerColor = checkWinner(state)
+    const winnerColor = checkWinner(state._board)
     if (winnerColor === 'red' || winnerColor === 'yellow') {
         state.setWinnerRecord(winnerColor)
         const idByTimeStamp = new Date().getTime()
@@ -81,8 +81,7 @@ function resetGame() {
         grid.classList.remove('fall')
     })
     document.getElementById('player-indicator').style.background = 'red'
-    const winnerName = document.getElementById('winner-name')
-    winnerName.innerText = ''
+    document.getElementById('winner-name').innerText = ''
     // Bind the click events for the grid.
     document.querySelectorAll('.row').forEach(i => i.addEventListener('click', positionClick))
     document.getElementById('tbody').innerHTML = ''
@@ -115,13 +114,9 @@ function displayScoreBoard() {
         .then(data => {
             const highestTen = Object.values(data).sort((a, b) => b.score - a.score).slice(0, 10)
             const tbody = document.getElementById('tbody')
-
             for (let i = 0; i < highestTen.length; i++) {
                 let tr = '<tr>'
-                /* Must not forget the $ sign */
                 tr += '<td>' + highestTen[i].player + '</td>' + '<td>' + highestTen[i].color + '<td>' + highestTen[i].score.toString() + '</td></tr>'
-
-                /* We add the table row to the table body */
                 tbody.innerHTML += tr
             }
         })
@@ -148,15 +143,12 @@ function refreshPage() {
 
 window.onload = () => {
     // Bind the click events for the grid.
-    document.querySelectorAll('.row').forEach(i => i.addEventListener(
-        'click', positionClick))
+    document.querySelectorAll('.row').forEach(i => i.addEventListener('click', positionClick))
 
     // Bind reset events for the grid
-    document.querySelectorAll('.playAgainButton').forEach(i => i.addEventListener(
-        'click', resetGame))
+    document.querySelectorAll('.playAgainButton').forEach(i => i.addEventListener('click', resetGame))
 
-    const resetButton = document.getElementById('reset-button')
-    resetButton.addEventListener('click', refreshPage)
+    document.getElementById('reset-button').addEventListener('click', refreshPage)
 
     document.getElementById('scoreBoardButton').addEventListener('click', displayScoreBoard)
     document.getElementById('scoreBoardButtonNobody').addEventListener('click', displayScoreBoard)
@@ -166,8 +158,7 @@ window.onload = () => {
         classList.add('d-block')
     })
 
-    const userNameInputButton = document.getElementById('userNameInputButton')
-    userNameInputButton.addEventListener('click', () => { getPlayerNames() })
+    document.getElementById('userNameInputButton').addEventListener('click', () => { getPlayerNames() })
 
     document.getElementById('clearScoreBoardButton').addEventListener('click', clearScoreBoard)
 }
