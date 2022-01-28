@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const fs = require('fs')
 const path = require('path')
-const repPath = path.resolve(__dirname, '..') + '/'
+const repPath = path.resolve(__dirname, '..') + '/browser'
 const bodyParser = require('body-parser')
 
 app.use(cors())

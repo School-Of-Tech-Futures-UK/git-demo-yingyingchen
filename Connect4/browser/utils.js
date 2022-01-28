@@ -5,7 +5,6 @@ class State {
         this.colNum = colNum
         this.initialPlayerColor = initialPlayerColor
         this.board = []
-        this._board = []
         this.turn = ''
         this.numberOfTurns = 0
         this.winnerRecord = {
@@ -23,7 +22,6 @@ class State {
 
     createState(rowNum, colNum, initialPlayerColor) {
         this.board = Array(rowNum).fill(null).map(() => Array(colNum).fill(null))
-        this._board = Array(rowNum).fill(null).map(() => Array(colNum).fill(0))
         this.turn = initialPlayerColor
     }
 
@@ -46,7 +44,6 @@ class State {
 function copyStateInstance(state) {
     let stateCopy = new State(state.rowNum, state.colNum, state.initialPlayerColor)
     stateCopy.board = state.board.map(x => x.slice())
-    stateCopy._board = state._board.map(x => x.slice())
     stateCopy.turn = state.turn
     stateCopy.numberOfTurns = state.numberOfTurns
     stateCopy.winnerRecord = { ...state.winnerRecord }
@@ -55,21 +52,13 @@ function copyStateInstance(state) {
 }
 
 function takeTurn(rowSelected, state) {
-    const map = {
-        red: 1,
-        yellow: -1
-    }
     const stateCopy = copyStateInstance(state)
     if (state.isRowAvailable(rowSelected)) {
         // push one piece into the board
         const nullArr = stateCopy.board[rowSelected].filter(x => !x)
         const newArr = stateCopy.board[rowSelected].filter(x => x)
         newArr.push(stateCopy.turn)
-        const zeroArr = stateCopy._board[rowSelected].filter(x => x === 0)
-        const newArrMap = stateCopy._board[rowSelected].filter(x => x !== 0)
-        newArrMap.push(map[stateCopy.turn])
         stateCopy.board[rowSelected] = [...newArr, ...nullArr.slice(0, nullArr.length - 1)]
-        stateCopy._board[rowSelected] = [...newArrMap, ...zeroArr.slice(0, zeroArr.length - 1)]
         // change turn 
         stateCopy.turn = (stateCopy.turn === 'yellow') ? 'red' : 'yellow'
         // increase number of turns played
@@ -85,9 +74,9 @@ function takeTurn(rowSelected, state) {
 function checkWinnerInArray(arr) {
     for (let j = 0; j < arr.length - 3; j++) {
         const sum = arr.slice(j, j + 4).reduce((prev, curr) => prev + curr, 0) // hof
-        if (sum === 4) {
+        if (arr.slice(j, j + 4).every(x => x === 'red')) {
             return 'red'
-        } else if (sum === -4) {
+        } else if (arr.slice(j, j + 4).every(x => x === 'yellow')) {
             return 'yellow'
         }
     }
@@ -155,7 +144,7 @@ function checkWinner(board) {
     }
 
     // check if game is finished
-    if (!board.some(x => x.includes(0))) { return 'nobody' }
+    if (!board.some(x => x.includes(null))) { return 'nobody' }
     return null
 }
 

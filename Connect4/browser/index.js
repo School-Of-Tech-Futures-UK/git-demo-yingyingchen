@@ -24,7 +24,7 @@ function positionClick(event) {
     // draw the grid with the given state
     drawBoard(state)
     // check for winner
-    const winnerColor = checkWinner(state._board)
+    const winnerColor = checkWinner(state.board)
     if (winnerColor === 'red' || winnerColor === 'yellow') {
         state.setWinnerRecord(winnerColor)
         const idByTimeStamp = new Date().getTime()
