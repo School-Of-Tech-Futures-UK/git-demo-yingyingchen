@@ -73,7 +73,6 @@ function takeTurn(rowSelected, state) {
 // check for winner
 function checkWinnerInArray(arr) {
     for (let j = 0; j < arr.length - 3; j++) {
-        const sum = arr.slice(j, j + 4).reduce((prev, curr) => prev + curr, 0) // hof
         if (arr.slice(j, j + 4).every(x => x === 'red')) {
             return 'red'
         } else if (arr.slice(j, j + 4).every(x => x === 'yellow')) {
@@ -86,14 +85,13 @@ function checkWinnerInArray(arr) {
 function checkWinner(board) {
     const rowNum = board.length
     const colNum = board[0].length
-    let winner = null
+    // let winner = null
     // check row
-    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
-        const rowChecking = board[rowIndex]
-        winner = checkWinnerInArray(rowChecking)
-        if (winner) {
-            return winner
-        }
+    let winnerCheckingArr = board.map((row) => checkWinnerInArray(row))
+    if (winnerCheckingArr.includes('red')) {
+        return 'red'
+    } else if (winnerCheckingArr.includes('yellow')) {
+        return 'yellow'
     }
 
     // check col
