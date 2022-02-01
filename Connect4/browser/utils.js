@@ -85,7 +85,7 @@ function checkWinnerInArray(arr) {
 function checkWinner(board) {
     const rowNum = board.length
     const colNum = board[0].length
-    // let winner = null
+    let winner = null
     // check row
     let winnerCheckingArr = board.map((row) => checkWinnerInArray(row))
     if (winnerCheckingArr.includes('red')) {
