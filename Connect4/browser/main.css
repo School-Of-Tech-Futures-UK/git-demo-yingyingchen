@@ -19,6 +19,11 @@
     flex-direction: column-reverse;
 }
 
+.row:hover {
+    opacity: 0.8;
+    outline: 2px solid white;
+}
+
 .grid {
     width: 400px;
     height: 330px;
