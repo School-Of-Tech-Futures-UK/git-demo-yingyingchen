@@ -51,14 +51,20 @@ function copyStateInstance(state) {
     return stateCopy
 }
 
+function placeDisc(rowSelected, board, turn) {
+    const boardCopy = board.map(x => x.slice())
+    const nullArr = boardCopy[rowSelected].filter(x => !x)
+    const newArr = boardCopy[rowSelected].filter(x => x)
+    newArr.push(turn)
+    boardCopy[rowSelected] = [...newArr, ...nullArr.slice(0, nullArr.length - 1)]
+    return boardCopy
+}
+
 function takeTurn(rowSelected, state) {
     const stateCopy = copyStateInstance(state)
     if (state.isRowAvailable(rowSelected)) {
         // push one piece into the board
-        const nullArr = stateCopy.board[rowSelected].filter(x => !x)
-        const newArr = stateCopy.board[rowSelected].filter(x => x)
-        newArr.push(stateCopy.turn)
-        stateCopy.board[rowSelected] = [...newArr, ...nullArr.slice(0, nullArr.length - 1)]
+        stateCopy.board = placeDisc(rowSelected, state.board, state.turn)
         // change turn 
         stateCopy.turn = (stateCopy.turn === 'yellow') ? 'red' : 'yellow'
         // increase number of turns played
@@ -87,11 +93,12 @@ function checkWinner(board) {
     const colNum = board[0].length
     let winner = null
     // check row
-    let winnerCheckingArr = board.map((row) => checkWinnerInArray(row))
-    if (winnerCheckingArr.includes('red')) {
-        return 'red'
-    } else if (winnerCheckingArr.includes('yellow')) {
-        return 'yellow'
+    for (let rowIndex = 0; rowIndex < rowNum; rowIndex++) {
+        const rowChecking = board[rowIndex]
+        winner = checkWinnerInArray(rowChecking)
+        if (winner) {
+            return winner
+        }
     }
 
     // check col
@@ -153,5 +160,6 @@ if (typeof exports === 'object') {
         takeTurn,
         checkWinnerInArray,
         checkWinner,
+        placeDisc
     }
 }

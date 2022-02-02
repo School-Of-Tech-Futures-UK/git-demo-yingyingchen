@@ -26,7 +26,7 @@
         })
     </script>
     <script type="text/javascript" src="utils.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="aiplayer.js"></script>
 
     <div class="card" style="background-color: slategrey; width: 30rem; margin: 0 auto;">
         <div class="card-body positive-relative">
@@ -95,13 +95,10 @@
                 <div class="column" id="player-indicator"></div>
             </div>
             <div class="container d-flex justify-content-center"><span id="player-indicator-name"></span>
-                <span>, it's your turn</span></div>
+                <span>it's your turn</span></div>
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-outline btn-dark d-block align-self-start"
                     style="color: white; border: 1px white solid" id="reset-button">Reset</button>
-                <button type="button" class="btn btn-outline btn-dark d-block align-self-center"
-                    style="color: white; border: 1px white solid" id="clearScoreBoardButton" data-toggle="modal"
-                    data-target="#clearScoreBoardMessageModal">Clear Score Board</button>
                 <button type="button" class="btn btn-outline btn-dark playAgainButton d-none align-self-end"
                     style="color: white; border: 1px white solid" id="playAgainButtonOutside">Play Again</button>
             </div>
@@ -120,34 +117,7 @@
         show nobody wins
     </button>
 
-    <!-- player name input modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="background-color: darkblue;">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel">Welcome to the Connect 4 game! Please enter each
-                        player's name to play.</h6>
-                </div>
-                <div class="modal-body" style="text-align: left;">
-                    <form id="nameForm">
-                        <div class="form-group">
-                            <label for="red-name-input">Red player:</label>
-                            <input type="text" class="form-control" id="red-name" name="red-name"
-                                placeholder="Enter your name">
-                            <label for="yellow-name-input">Yellow player:</label>
-                            <input type="text" class="form-control" id="yellow-name" name="yellow-name"
-                                placeholder="Enter your name">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline btn-dark" id="userNameInputButton"
-                        style="color: white; border: 1px white solid;">Enter</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- winner message modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
@@ -177,52 +147,6 @@
                 <div class="modal-body">
                     <button type="button" class="btn btn-outline btn-dark" data-dismiss="modal" data-toggle="modal"
                         data-target="#scoreBoard" id="scoreBoardButtonNobody">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- score board modal -->
-    <div class="modal fade" id="scoreBoard" tabindex="-1" role="dialog" aria-labelledby="scoreBoardTitle"
-        aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" style="background-color: darkblue;">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel">High Scores!</h6>
-                </div>
-                <div class="modal-body">
-                    <!-- <span id="recordsText"></span> -->
-                    <table>
-                        <tr>
-                            <th>Name</th>
-                            <th>Color</th>
-                            <th>Score</th>
-                        </tr>
-                        <tbody id="tbody"></tbody>
-                    </table>
-                </div>
-                <div class="modal-body">
-                    <button type="button" class="btn btn-outline btn-dark playAgainButton" data-dismiss="modal"
-                        id="playAgainButton">Play
-                        Again</button>
-                    <button type="button" class="btn btn-outline btn-dark" data-dismiss="modal"
-                        id="scoreBoardCloseButton">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- score board cleared message modal -->
-    <div class="modal fade" id="clearScoreBoardMessageModal" tabindex="-1" role="dialog"
-        aria-labelledby="clearScoreBoardMessageModalTitle" aria-hidden="true" data-backdrop="static"
-        data-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" style="background-color: darkblue;">
-                <div class="modal-body">
-                    Score Board has been cleared
-                </div>
-                <div class="modal-body">
-                    <button type="button" class="btn btn-outline btn-dark" data-dismiss="modal">OK</button>
                 </div>
             </div>
         </div>

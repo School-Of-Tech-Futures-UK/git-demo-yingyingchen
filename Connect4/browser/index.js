@@ -1,8 +1,6 @@
 const rowNum = 7
 const colNum = 6
 const initialPlayerColor = 'red'
-const PLAYER = 'red'
-const AI = 'yellow'
 let state = new State(rowNum, colNum, initialPlayerColor)
 let redPlayer = null
 let yellowPlayer = null
@@ -18,44 +16,15 @@ for (f of functions) {
 function positionClick(event) {
     const id = event.target.id
     let rowSelected = id[4]
-    if (state.turn === PLAYER) {
-        // update game state after placing a disc
-        state = takeTurn(rowSelected, state)
-        // change player indicator
-        document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
-        document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
-        // draw the grid with the given state
-        drawBoard(state)
-        // check for winner
-        const winnerColor = checkWinner(state.board)
-        if (winnerColor === 'red') {
-            gameOver(winnerColor)
-        } else {
-            setTimeout(() => {
-                const rowSelectedByAI = getRandomRow(state)
-                state = takeTurn(rowSelectedByAI, state)
-                // change player indicator
-                document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
-                document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
-                // draw the grid with the given state
-                drawBoard(state)
-                // check for winner
-                const winnerColor = checkWinner(state.board)
-                if (winnerColor === 'yellow') {
-                    gameOver(winnerColor)
-                }
-            }, 500)
-
-        }
-    }
-
-
-
-
-
-}
-
-function gameOver(winnerColor) {
+    // update game state after placing a disc
+    state = takeTurn(rowSelected, state)
+    // change player indicator
+    document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
+    document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
+    // draw the grid with the given state
+    drawBoard(state)
+    // check for winner
+    const winnerColor = checkWinner(state.board)
     if (winnerColor === 'red' || winnerColor === 'yellow') {
         state.setWinnerRecord(winnerColor)
         const idByTimeStamp = new Date().getTime()
