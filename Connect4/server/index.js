@@ -14,7 +14,14 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }))
 
-app.get('/connect4', function (req, res) {
+app.get('/connect4/home', function (req, res) {
+    res.sendFile(path.join(repPath, 'home.html'))
+})
+
+app.get('/connect4/solo', function (req, res) {
+    res.sendFile(path.join(repPath, 'aiplayer.html'))
+})
+app.get('/connect4/with-friend', function (req, res) {
     res.sendFile(path.join(repPath, 'index.html'))
 })
 

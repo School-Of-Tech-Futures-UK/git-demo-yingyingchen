@@ -4,8 +4,9 @@
 const rowNum = 7
 const colNum = 6
 const initialPlayerColor = 'red'
-const PLAYER = 'red'
-const AI = 'yellow'
+let PLAYER = 'red'
+let AI = 'yellow'
+let MINMAXPROBABILITY = 0
 let state = new State(rowNum, colNum, initialPlayerColor)
 let redPlayer = null
 let yellowPlayer = null
@@ -22,8 +23,8 @@ function getAvailableRows(board) {
     return allRows.filter(i => board[i].includes(null))
 }
 
-function getRandomRow(state) {
-    const availableRows = getAvailableRows(state)
+function getRandomRow(board) {
+    const availableRows = getAvailableRows(board)
     return availableRows[Math.floor(Math.random() * (availableRows.length - 1))]
 }
 
@@ -138,15 +139,8 @@ function getMinMaxRow(board, depth, alpha, beta, isMaxPlayer) {
             const nextBoard = placeDisc(rowIndex, boardCopy, AI)
             const nextScore = getMinMaxRow(nextBoard, depth - 1, alpha, beta, false)[1]
             if (nextScore > score) {
-                let change = false
-                const randomNum = Math.random()
-                if (randomNum < 0.3) change = true
-                else if (randomNum < 0.6) change = true
-                else if (randomNum < 0.9) change = true
-                if (change) {
-                    score = nextScore
-                    bestRow = rowIndex
-                }
+                score = nextScore
+                bestRow = rowIndex
 
             }
             alpha = Math.max(alpha, score)
@@ -163,15 +157,8 @@ function getMinMaxRow(board, depth, alpha, beta, isMaxPlayer) {
             const nextBoard = placeDisc(rowIndex, boardCopy, PLAYER)
             const nextScore = getMinMaxRow(nextBoard, depth - 1, alpha, beta, true)[1]
             if (nextScore < score) {
-                let change = false
-                const randomNum = Math.random()
-                if (randomNum < 0.3) change = true
-                else if (randomNum < 0.6) change = true
-                else if (randomNum < 0.9) change = true
-                if (change) {
-                    score = nextScore
-                    bestRow = rowIndex
-                }
+                score = nextScore
+                bestRow = rowIndex
             }
             beta = Math.min(beta, score)
             if (alpha >= beta) {
@@ -180,6 +167,29 @@ function getMinMaxRow(board, depth, alpha, beta, isMaxPlayer) {
         }
         return [bestRow, score]
     }
+}
+
+function setDifficulty(event) {
+    MINMAXPROBABILITY = Number(event.target.value)
+}
+
+function chooseWithProbability(rowSelectedByAI, randomRow) {
+    const r = Math.random()
+    return r <= MINMAXPROBABILITY ? rowSelectedByAI : randomRow
+}
+
+function suggestMove() {
+    console.log(`suggest move called`)
+    if (state.turn === PLAYER) {
+        AI = 'red'
+        PLAYER = 'yellow'
+        const [rowSelectedByAI, score] = getMinMaxRow(state.board, 5, -Math.pow(10, 1000), Math.pow(10, 1000), true)
+        console.log(`suggest move: ${rowSelectedByAI}`)
+        AI = 'yellow'
+        PLAYER = 'red'
+        document.getElementById(`row-${rowSelectedByAI}`).style.background='red'
+        setTimeout(()=>document.getElementById(`row-${rowSelectedByAI}`).style.background='darkblue', 200)
+}
 }
 
 // click the column, play the game, record the game state, and check for winner
@@ -202,7 +212,10 @@ function positionClick(event) {
             setTimeout(() => {
                 // const rowSelectedByAI = getRandomRow(state)
                 const [rowSelectedByAI, score] = getMinMaxRow(state.board, 5, -Math.pow(10, 1000), Math.pow(10, 1000), true)
-                state = takeTurn(rowSelectedByAI, state)
+                const randomRow = getRandomRow(state.board)
+                rowSelected = chooseWithProbability(rowSelectedByAI, randomRow)
+                state = takeTurn(rowSelected, state)
+                console.log(`row by ai: ${rowSelectedByAI} row by random: ${randomRow} row: ${rowSelected} ${MINMAXPROBABILITY}`)
                 // change player indicator
                 document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
                 document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
@@ -285,21 +298,11 @@ window.onload = () => {
     // Bind the click events for the grid.
     document.querySelectorAll('.row').forEach(i => i.addEventListener('click', positionClick))
 
+    document.querySelectorAll('.chooseDifficultyButton').forEach(i => i.addEventListener('click', setDifficulty))
+
     // Bind reset events for the grid
-    document.querySelectorAll('.playAgainButton').forEach(i => i.addEventListener('click', resetGame))
 
     document.getElementById('reset-button').addEventListener('click', refreshPage)
-
-    document.getElementById('scoreBoardButton').addEventListener('click', displayScoreBoard)
-    document.getElementById('scoreBoardButtonNobody').addEventListener('click', displayScoreBoard)
-    document.getElementById('scoreBoardCloseButton').addEventListener('click', () => {
-        const classList = document.getElementById('playAgainButtonOutside').classList
-        classList.remove('d-none')
-        classList.add('d-block')
-    })
-
-    document.getElementById('userNameInputButton').addEventListener('click', () => { getPlayerNames() })
-
-    document.getElementById('clearScoreBoardButton').addEventListener('click', clearScoreBoard)
+    document.getElementById('suggest-move-button').addEventListener('click', suggestMove)
 }
 

@@ -20,10 +20,6 @@
     background-color: darkblue;
 }
 
-.row:hover {
-    opacity: 0.8;
-    outline: 2px solid white;
-}
 
 .grid {
     width: 400px;
@@ -62,20 +58,56 @@ body {
     color: white;
 }
 
-.fall {
-    animation-name: fall-animation;
-    animation-duration: 500ms;
+.color-change-red-yellow {
+    animation: redToYellow ease;
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+    animation-fill-mode: both;
 }
 
-@keyframes fall-animation {
-    from {
-        transform: translateY(-300px);
-    }
-    to {
-        transform: translateY(0);
-    }
+.color-change-yellow-red {
+    animation: yellowToRed;
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+    animation-fill-mode: both;
 }
+
+@keyframes redToYellow {
+    0% {
+      background-color: red;
+    }
+  
+    50% {
+      background-color: yellow;
+    }
+  
+    100% {
+      background-color: red;
+    }
+  }
+
+  @keyframes yellowToRed {
+    0% {
+      background-color: yellow;
+    }
+  
+    50% {
+      background-color: red;
+    }
+  
+    100% {
+      background-color: yellow;
+    }
+  }
 
 a {
     text-decoration: none;
   }
+
+
+.top-layer {
+    z-index: 9999;
+    position: absolute;
+    top:50%;
+    left:25%;
+}
