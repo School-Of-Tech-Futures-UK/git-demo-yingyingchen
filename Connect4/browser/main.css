@@ -52,7 +52,6 @@ body {
     text-align: center;
 }
 
-
 #player-indicator {
     background: red;
 }
@@ -78,4 +77,13 @@ body {
 
 a {
     text-decoration: none;
-  }
+}
+
+@media only screen and (max-width: 620px) {
+    /* For mobile phones: */
+    .menu,
+    .main,
+    .right {
+        width: 100%;
+    }
+}

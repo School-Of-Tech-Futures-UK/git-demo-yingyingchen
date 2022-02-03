@@ -20,7 +20,6 @@
     background-color: darkblue;
 }
 
-
 .grid {
     width: 400px;
     height: 330px;
@@ -48,7 +47,6 @@ body {
     text-align: center;
 }
 
-
 #player-indicator {
     background: red;
 }
@@ -74,40 +72,60 @@ body {
 
 @keyframes redToYellow {
     0% {
-      background-color: red;
+        background-color: red;
     }
-  
     50% {
-      background-color: yellow;
+        background-color: yellow;
     }
-  
     100% {
-      background-color: red;
+        background-color: red;
     }
-  }
+}
 
-  @keyframes yellowToRed {
+@keyframes yellowToRed {
     0% {
-      background-color: yellow;
+        background-color: yellow;
     }
-  
     50% {
-      background-color: red;
+        background-color: red;
     }
-  
     100% {
-      background-color: yellow;
+        background-color: yellow;
     }
-  }
+}
 
 a {
     text-decoration: none;
-  }
-
+}
 
 .top-layer {
     z-index: 9999;
     position: absolute;
-    top:50%;
-    left:25%;
+    top: 50%;
+    left: 25%;
+}
+
+.unmute {
+    background-image: url("unmute.png");
+    background-size: cover;
+    width: 35px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 9999;
+    position: absolute;
+    top: 5%;
+    left: 8%;
+}
+
+.mute {
+    background-image: url("mute.png");
+}
+
+@media only screen and (max-width: 620px) {
+    /* For mobile phones: */
+    .menu,
+    .main,
+    .right {
+        width: 100%;
+    }
 }

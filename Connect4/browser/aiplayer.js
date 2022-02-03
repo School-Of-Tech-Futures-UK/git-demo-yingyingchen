@@ -1,6 +1,3 @@
-
-
-
 const rowNum = 7
 const colNum = 6
 const initialPlayerColor = 'red'
@@ -46,15 +43,15 @@ function getArrayScore(arr, player) {
         }
         if (almostWin) {
             score += 5
-            // console.log('+5')
+                // console.log('+5')
         }
         if (twoStepsToWin) {
             score += 2
-            // console.log('+2')
+                // console.log('+2')
         }
         if (adversaryAlmostWin) {
             score -= 4
-            // console.log('-4')
+                // console.log('-4')
         }
     }
 
@@ -63,7 +60,7 @@ function getArrayScore(arr, player) {
 
 function getScore(board, player) {
     let score = 0
-    // center column
+        // center column
     score += board[Math.floor(rowNum / 2)].filter(x => x === player).length * 3
 
     // row
@@ -187,9 +184,9 @@ function suggestMove() {
         console.log(`suggest move: ${rowSelectedByAI}`)
         AI = 'yellow'
         PLAYER = 'red'
-        document.getElementById(`row-${rowSelectedByAI}`).style.background='red'
-        setTimeout(()=>document.getElementById(`row-${rowSelectedByAI}`).style.background='darkblue', 200)
-}
+        document.getElementById(`row-${rowSelectedByAI}`).style.background = 'red'
+        setTimeout(() => document.getElementById(`row-${rowSelectedByAI}`).style.background = 'darkblue', 200)
+    }
 }
 
 // click the column, play the game, record the game state, and check for winner
@@ -197,14 +194,15 @@ function positionClick(event) {
     const id = event.target.id
     let rowSelected = id[4]
     if (state.isRowAvailable(rowSelected)) {
-        // update game state after placing a disc
+        document.getElementById('button-player').play()
+            // update game state after placing a disc
         state = takeTurn(rowSelected, state)
-        // change player indicator
+            // change player indicator
         document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
         document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
-        // draw the grid with the given state
+            // draw the grid with the given state
         drawBoard(state)
-        // check for winner
+            // check for winner
         const winnerColor = checkWinner(state.board)
         if (winnerColor) {
             gameOver(winnerColor)
@@ -216,12 +214,12 @@ function positionClick(event) {
                 rowSelected = chooseWithProbability(rowSelectedByAI, randomRow)
                 state = takeTurn(rowSelected, state)
                 console.log(`row by ai: ${rowSelectedByAI} row by random: ${randomRow} row: ${rowSelected} ${MINMAXPROBABILITY}`)
-                // change player indicator
+                    // change player indicator
                 document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
                 document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
-                // draw the grid with the given state
+                    // draw the grid with the given state
                 drawBoard(state)
-                // check for winner
+                    // check for winner
                 const winnerColor = checkWinner(state.board)
                 if (winnerColor === AI) {
                     gameOver(winnerColor)
@@ -237,15 +235,20 @@ function gameOver(winnerColor) {
         state.setWinnerRecord(winnerColor)
         const idByTimeStamp = new Date().getTime()
         const record = {}
-        record[idByTimeStamp] = { ...state.winnerRecord }
-        // display the winner information
-        document.getElementById('winner-name').innerText = state.winnerRecord.player
+        record[idByTimeStamp] = {...state.winnerRecord }
+            // display the winner information
         document.getElementById('winner-color').innerText = state.winnerRecord.color
         document.getElementById('winner-score').innerText = state.numberOfTurns
         document.getElementById('winnerMessageButton').click()
         document.querySelectorAll('.row').forEach(i => i.removeEventListener('click', positionClick))
     } else if (winnerColor === 'nobody') {
         document.getElementById('nobodyWinsButton').click()
+    }
+
+    if (winnerColor === PLAYER) {
+        document.getElementById('win-player').play()
+    } else if (winnerColor === AI) {
+        document.getElementById('lose-player').play()
     }
 }
 
@@ -280,7 +283,7 @@ function resetGame() {
     })
     document.getElementById('player-indicator').style.background = 'red'
     document.getElementById('winner-name').innerText = ''
-    // Bind the click events for the grid.
+        // Bind the click events for the grid.
     document.querySelectorAll('.row').forEach(i => i.addEventListener('click', positionClick))
     document.getElementById('tbody').innerHTML = ''
     const classList = document.getElementById('playAgainButtonOutside').classList
@@ -305,4 +308,3 @@ window.onload = () => {
     document.getElementById('reset-button').addEventListener('click', refreshPage)
     document.getElementById('suggest-move-button').addEventListener('click', suggestMove)
 }
-

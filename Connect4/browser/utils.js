@@ -41,6 +41,7 @@ class State {
     }
 }
 
+
 function copyStateInstance(state) {
     let stateCopy = new State(state.rowNum, state.colNum, state.initialPlayerColor)
     stateCopy.board = state.board.map(x => x.slice())

@@ -16,38 +16,41 @@ for (f of functions) {
 function positionClick(event) {
     const id = event.target.id
     let rowSelected = id[4]
-    // update game state after placing a disc
+        // update game state after placing a disc
+    if (state.isRowAvailable(rowSelected)) { document.getElementById('button-player').play() }
     state = takeTurn(rowSelected, state)
-    // change player indicator
+        // change player indicator
     document.getElementById('player-indicator').style.background = state.turn ? state.turn : 'red'
     document.getElementById('player-indicator-name').innerText = state.nameColorMap[state.turn] ? state.nameColorMap[state.turn] : state.nameColorMap.red
-    // draw the grid with the given state
+        // draw the grid with the given state
     drawBoard(state)
-    // check for winner
+        // check for winner
     const winnerColor = checkWinner(state.board)
     if (winnerColor === 'red' || winnerColor === 'yellow') {
         state.setWinnerRecord(winnerColor)
         const idByTimeStamp = new Date().getTime()
         const record = {}
-        record[idByTimeStamp] = { ...state.winnerRecord }
-        // post the new score record to server
+        record[idByTimeStamp] = {...state.winnerRecord }
+            // post the new score record to server
         fetch('http://localhost:3001/connect4/scores', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ data: record, clearScoreBoard: false })
-        })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data: record, clearScoreBoard: false })
+            })
             .then(response => response.json())
             .then(data => console.log('Success:', data))
-        // display the winner information
+            // display the winner information
         document.getElementById('winner-name').innerText = state.winnerRecord.player
         document.getElementById('winner-color').innerText = state.winnerRecord.color
         document.getElementById('winner-score').innerText = state.numberOfTurns
         document.getElementById('winnerMessageButton').click()
+        document.getElementById('win-player').play()
         document.querySelectorAll('.row').forEach(i => i.removeEventListener('click', positionClick))
     } else if (winnerColor === 'nobody') {
         document.getElementById('nobodyWinsButton').click()
+        document.getElementById('lose-player').play()
     }
 }
 
@@ -82,7 +85,7 @@ function resetGame() {
     })
     document.getElementById('player-indicator').style.background = 'red'
     document.getElementById('winner-name').innerText = ''
-    // Bind the click events for the grid.
+        // Bind the click events for the grid.
     document.querySelectorAll('.row').forEach(i => i.addEventListener('click', positionClick))
     document.getElementById('tbody').innerHTML = ''
     const classList = document.getElementById('playAgainButtonOutside').classList
@@ -126,12 +129,12 @@ function displayScoreBoard() {
 function clearScoreBoard() {
     // post the empty score record to server
     fetch('http://localhost:3001/connect4/scores', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ data: {}, clearScoreBoard: true })
-    })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ data: {}, clearScoreBoard: true })
+        })
         .then(response => response.json())
         .then(data => console.log('Success:', data))
 }
@@ -162,4 +165,3 @@ window.onload = () => {
 
     document.getElementById('clearScoreBoardButton').addEventListener('click', clearScoreBoard)
 }
-
