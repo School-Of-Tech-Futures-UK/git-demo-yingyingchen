@@ -6,7 +6,8 @@
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="/main.css" rel="stylesheet" type="text/css">
+    <link href="/styles/main.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body>
@@ -19,23 +20,23 @@
             $('#myModal').modal('toggle');
         })
     </script>
-    <script type="text/javascript" src="/utils.js"></script>
-    <script type="text/javascript" src="/aiplayer.js"></script>
+    <script type="text/javascript" src="/scripts/utils.js"></script>
+    <script type="text/javascript" src="/scripts/aiplayer.js"></script>
 
     <audio id="button-player">
-        <source src="/button-19.mp3" type="audio/mp3">
+        <source src="/sound/button-19.mp3" type="audio/mp3">
     </audio>
     <audio id="win-player">
-        <source src="/tada.mp3" type="audio/mp3">
+        <source src="/sound/tada.mp3" type="audio/mp3">
     </audio>
     <audio id="lose-player">
-        <source src="/sad.mp3" type="audio/mp3">
+        <source src="/sound/sad.mp3" type="audio/mp3">
     </audio>
 
     <div class="card" style="background-color: slategrey; width: 30rem; margin: 0 auto;">
         <div class="card-body positive-relative">
             <h1 class="card-title">
-                <button type="button" class="btn btn-outline btn-dark d-block" onclick="location.href='http://localhost:3001/connect4/home';">Back</button> Connect 4
+                <button type="button" class="btn btn-outline btn-dark d-block" onclick="location.href='http://localhost:3001/connect4/';">Back</button> Connect 4
             </h1>
             <div class="container">
                 <div class="grid mx-auto" id="grid">
@@ -128,7 +129,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="http://localhost:3001/connect4/home"><button type="button"
+                    <a href="http://localhost:3001/connect4/"><button type="button"
                             class="btn btn-outline btn-dark d-block">Back</button></a>
                 </div>
             </div>

@@ -1,0 +1,40 @@
+{
+  "name": "connect4",
+  "version": "2.0.0",
+  "description": "A Connect 4 game created with node.js and Express framework.",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "server.js"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jest": "^26.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "jest": "^27.4.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/School-Of-Tech-Futures-UK/git-demo-yingyingchen.git"
+  },
+  "keywords": [
+    "Connect",
+    "4",
+    "express",
+    "node"
+  ],
+  "author": "Yingying Chen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/School-Of-Tech-Futures-UK/git-demo-yingyingchen/issues"
+  },
+  "homepage": "https://github.com/School-Of-Tech-Futures-UK/git-demo-yingyingchen#readme"
+}
