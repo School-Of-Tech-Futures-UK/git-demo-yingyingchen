@@ -4,6 +4,7 @@ const initialPlayerColor = 'red'
 let state = new State(rowNum, colNum, initialPlayerColor)
 let redPlayer = null
 let yellowPlayer = null
+
 const functions = ['takeTurn', 'checkWinner'];
 for (f of functions) {
     const functionObject = window[f];

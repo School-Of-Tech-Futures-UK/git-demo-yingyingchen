@@ -7,6 +7,7 @@ let MINMAXPROBABILITY = 0
 let state = new State(rowNum, colNum, initialPlayerColor)
 let redPlayer = null
 let yellowPlayer = null
+
 const functions = ['takeTurn', 'checkWinner'];
 for (f of functions) {
     const functionObject = window[f];
@@ -15,16 +16,19 @@ for (f of functions) {
     }
 }
 
+// get all rows that are not full
 function getAvailableRows(board) {
     const allRows = [...Array(rowNum).keys()]
     return allRows.filter(i => board[i].includes(null))
 }
 
+// choose a random row from all available rows
 function getRandomRow(board) {
     const availableRows = getAvailableRows(board)
     return availableRows[Math.floor(Math.random() * (availableRows.length - 1))]
 }
 
+// get the score for an array
 function getArrayScore(arr, player) {
     let score = 0
     let adversary = AI
@@ -58,6 +62,7 @@ function getArrayScore(arr, player) {
     return score
 }
 
+// get the score for the entire board
 function getScore(board, player) {
     let score = 0
         // center column
@@ -109,6 +114,7 @@ function getScore(board, player) {
     return score
 }
 
+// minimax algorithm
 function getMinMaxRow(board, depth, alpha, beta, isMaxPlayer) {
     const availableRows = getAvailableRows(board)
     const isTerminal = (checkWinner(board) || availableRows.length === 0)
@@ -166,15 +172,18 @@ function getMinMaxRow(board, depth, alpha, beta, isMaxPlayer) {
     }
 }
 
+// set the level of difficulty
 function setDifficulty(event) {
     MINMAXPROBABILITY = Number(event.target.value)
 }
 
+// choose between minimax and random row with a given probability
 function chooseWithProbability(rowSelectedByAI, randomRow) {
     const r = Math.random()
     return r <= MINMAXPROBABILITY ? rowSelectedByAI : randomRow
 }
 
+// suggest move to player using the minimax algorithm
 function suggestMove() {
     console.log(`suggest move called`)
     if (state.turn === PLAYER) {
@@ -224,12 +233,13 @@ function positionClick(event) {
                 if (winnerColor === AI) {
                     gameOver(winnerColor)
                 }
-            }, 0.01)
+            }, 500)
 
         }
     }
 }
 
+// display game over related info
 function gameOver(winnerColor) {
     if (winnerColor === 'red' || winnerColor === 'yellow') {
         state.setWinnerRecord(winnerColor)
