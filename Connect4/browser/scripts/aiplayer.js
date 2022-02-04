@@ -23,9 +23,9 @@ function getAvailableRows(board) {
 }
 
 // choose a random row from all available rows
-function getRandomRow(board) {
-    const availableRows = getAvailableRows(board)
-    return availableRows[Math.floor(Math.random() * (availableRows.length - 1))]
+function getRandomRow(board, rowSelectedByAI) {
+    const availableRows = getAvailableRows(board).filter(x => x!==rowSelectedByAI)
+    return availableRows[Math.floor(Math.random() * (availableRows.length - 2))]
 }
 
 // get the score for an array
@@ -219,7 +219,7 @@ function positionClick(event) {
             setTimeout(() => {
                 // const rowSelectedByAI = getRandomRow(state)
                 const [rowSelectedByAI, score] = getMinMaxRow(state.board, 5, -Math.pow(10, 1000), Math.pow(10, 1000), true)
-                const randomRow = getRandomRow(state.board)
+                const randomRow = getRandomRow(state.board, rowSelectedByAI)
                 rowSelected = chooseWithProbability(rowSelectedByAI, randomRow)
                 state = takeTurn(rowSelected, state)
                 console.log(`row by ai: ${rowSelectedByAI} row by random: ${randomRow} row: ${rowSelected} ${MINMAXPROBABILITY}`)
